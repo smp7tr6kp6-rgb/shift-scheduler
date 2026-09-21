@@ -1,0 +1,790 @@
+{{define "schedule_grid"}}
+<div>
+	                
+<div class="grid grid-cols-3 items-center gap-4 mb-4">
+	    <div>
+	        
+	        <h3 class="text-2xl font-bold text-gray-800">
+	        
+	            Master Schedule
+	        
+	        <span id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours" class="text-base text-gray-500 font-normal">(20.00 hrs)</span>
+	        <span id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-diff-hours" class="text-base font-normal"></span>
+	        </h3>
+	        
+	    </div>
+
+    <div class="flex justify-center">
+    
+    </div>
+    
+    <div class="flex justify-end items-center gap-2">
+        
+        
+
+        
+            
+<span id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-status" class="status-badge ml-2 flex-shrink-0 inline-block px-2 py-0.5 text-xs font-semibold rounded-full
+    
+        text-green-800 bg-green-100
+    ">
+    
+        Approved
+    
+</span>
+
+<script>
+(function () {
+    
+    if (window.updateStatusText) return;
+
+    const STATUS_STYLES = {
+        approved: {
+            text: "Approved",
+            classes: ["text-green-800", "bg-green-100"]
+        },
+        pending: {
+            text: "Pending",
+            classes: ["text-yellow-800", "bg-yellow-100"]
+        },
+        none: {
+            text: "No Schedule Submitted",
+            classes: ["text-gray-800", "bg-gray-100"]
+        },
+        denied: {
+            text: "Denied",
+            classes: ["text-red-800", "bg-red-100"]
+        }
+    };
+
+    const ALL_STATUS_CLASSES = [
+        "text-green-800", "bg-green-100",
+        "text-yellow-800", "bg-yellow-100",
+        "text-gray-800", "bg-gray-100",
+        "text-red-800", "bg-red-100"
+    ];
+
+    window.updateStatusText = function (elementId, statusKey) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        const status = STATUS_STYLES[statusKey];
+        if (!status) return;
+
+        el.classList.remove(...ALL_STATUS_CLASSES);
+        el.classList.add(...status.classes);
+        el.textContent = status.text;
+    };
+})();
+</script>
+
+
+        
+
+        
+            <button type="button" id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-edit-btn" class="px-4 py-2 text-sm font-medium bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                Edit
+            </button>
+            <form id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-submit-form" hx-post="/schedule/master" hx-target="#id-a82dd6d7-f6de-4617-8432-85bc55ec8091-status" hx-swap="outerHTML">
+              <input type="hidden" name="schedule" id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-schedule-input">
+              <input type="hidden" name="week" value="0">
+              <button type="button" id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-cancel-btn" class="px-4 py-2 text-sm font-medium bg-gray-600 text-white rounded-lg hover:bg-gray-700 hidden">
+                Cancel
+              </button>
+              <button type="submit" id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-submit-btn" class="px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 hidden">
+                Submit
+              </button>
+            </form>
+        
+    </div>
+</div>
+
+
+<div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700 mb-2" aria-label="Schedule legend">
+  <div class="flex items-center gap-2">
+    <span class="legend-swatch bg-blue-slot" aria-hidden="true"></span>
+    <span>Normal schedule</span>
+  </div>
+
+  
+
+  <div class="flex items-center gap-2">
+    <span class="legend-swatch bg-unselectable" aria-hidden="true"></span>
+    <span>Unavailable</span>
+  </div>
+</div>
+
+<div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091" class="schedule-grid border border-gray-200 rounded-md overflow-hidden mb-4" style="background: white; grid-template-rows: auto repeat(5, 2rem); grid-template-columns: auto repeat(96, minmax(0px, 1fr)) auto;" role="grid" aria-label="Weekly schedule grid"><div class="schedule-hour-header" style="grid-column-start: 2; grid-row-start: 1;">7 am</div><div class="schedule-hour-header" style="grid-column-start: 10; grid-row-start: 1;">8 am</div><div class="schedule-hour-header" style="grid-column-start: 18; grid-row-start: 1;">9 am</div><div class="schedule-hour-header" style="grid-column-start: 26; grid-row-start: 1;">10 am</div><div class="schedule-hour-header" style="grid-column-start: 34; grid-row-start: 1;">11 am</div><div class="schedule-hour-header" style="grid-column-start: 42; grid-row-start: 1;">12 pm</div><div class="schedule-hour-header" style="grid-column-start: 50; grid-row-start: 1;">1 pm</div><div class="schedule-hour-header" style="grid-column-start: 58; grid-row-start: 1;">2 pm</div><div class="schedule-hour-header" style="grid-column-start: 66; grid-row-start: 1;">3 pm</div><div class="schedule-hour-header" style="grid-column-start: 74; grid-row-start: 1;">4 pm</div><div class="schedule-hour-header" style="grid-column-start: 82; grid-row-start: 1;">5 pm</div><div class="schedule-hour-header" style="grid-column-start: 90; grid-row-start: 1;">6 pm</div><div class="hour-divider" style="grid-column: 10 / span 1;"></div><div class="hour-divider" style="grid-column: 18 / span 1;"></div><div class="hour-divider" style="grid-column: 26 / span 1;"></div><div class="hour-divider" style="grid-column: 34 / span 1;"></div><div class="hour-divider" style="grid-column: 42 / span 1;"></div><div class="hour-divider" style="grid-column: 50 / span 1;"></div><div class="hour-divider" style="grid-column: 58 / span 1;"></div><div class="hour-divider" style="grid-column: 66 / span 1;"></div><div class="hour-divider" style="grid-column: 74 / span 1;"></div><div class="hour-divider" style="grid-column: 82 / span 1;"></div><div class="hour-divider" style="grid-column: 90 / span 1;"></div><div class="day-label" style="grid-row-start: 2; grid-column-start: 1;">Mon</div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="420" role="gridcell" aria-label="Mon 7:00 AM–7:10 AM: Unavailable" tabindex="-1" title="Mon 7:00 AM–7:10 AM: Unavailable" style="grid-row-start: 2; grid-column-start: 2;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="430" role="gridcell" aria-label="Mon 7:10 AM–7:15 AM: Unavailable" tabindex="-1" title="Mon 7:10 AM–7:15 AM: Unavailable" style="grid-row-start: 2; grid-column-start: 3;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="435" role="gridcell" aria-label="Mon 7:15 AM–7:20 AM: Unavailable" tabindex="-1" title="Mon 7:15 AM–7:20 AM: Unavailable" style="grid-row-start: 2; grid-column-start: 4;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="440" role="gridcell" aria-label="Mon 7:20 AM–7:30 AM: Unavailable" tabindex="-1" title="Mon 7:20 AM–7:30 AM: Unavailable" style="grid-row-start: 2; grid-column-start: 5;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="450" role="gridcell" aria-label="Mon 7:30 AM–7:40 AM: Empty" tabindex="0" title="Mon 7:30 AM–7:40 AM: Empty" style="grid-row-start: 2; grid-column-start: 6;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="460" role="gridcell" aria-label="Mon 7:40 AM–7:45 AM: Empty" tabindex="0" title="Mon 7:40 AM–7:45 AM: Empty" style="grid-row-start: 2; grid-column-start: 7;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="465" role="gridcell" aria-label="Mon 7:45 AM–7:50 AM: Empty" tabindex="0" title="Mon 7:45 AM–7:50 AM: Empty" style="grid-row-start: 2; grid-column-start: 8;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="470" role="gridcell" aria-label="Mon 7:50 AM–8:00 AM: Empty" tabindex="0" title="Mon 7:50 AM–8:00 AM: Empty" style="grid-row-start: 2; grid-column-start: 9;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="480" role="gridcell" aria-label="Mon 8:00 AM–8:10 AM: Empty" tabindex="0" title="Mon 8:00 AM–8:10 AM: Empty" style="grid-row-start: 2; grid-column-start: 10;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="490" role="gridcell" aria-label="Mon 8:10 AM–8:15 AM: Empty" tabindex="0" title="Mon 8:10 AM–8:15 AM: Empty" style="grid-row-start: 2; grid-column-start: 11;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="495" role="gridcell" aria-label="Mon 8:15 AM–8:20 AM: Empty" tabindex="0" title="Mon 8:15 AM–8:20 AM: Empty" style="grid-row-start: 2; grid-column-start: 12;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="500" role="gridcell" aria-label="Mon 8:20 AM–8:30 AM: Empty" tabindex="0" title="Mon 8:20 AM–8:30 AM: Empty" style="grid-row-start: 2; grid-column-start: 13;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="510" role="gridcell" aria-label="Mon 8:30 AM–8:40 AM: Empty" tabindex="0" title="Mon 8:30 AM–8:40 AM: Empty" style="grid-row-start: 2; grid-column-start: 14;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="520" role="gridcell" aria-label="Mon 8:40 AM–8:45 AM: Empty" tabindex="0" title="Mon 8:40 AM–8:45 AM: Empty" style="grid-row-start: 2; grid-column-start: 15;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="525" role="gridcell" aria-label="Mon 8:45 AM–8:50 AM: Empty" tabindex="0" title="Mon 8:45 AM–8:50 AM: Empty" style="grid-row-start: 2; grid-column-start: 16;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="530" role="gridcell" aria-label="Mon 8:50 AM–9:00 AM: Empty" tabindex="0" title="Mon 8:50 AM–9:00 AM: Empty" style="grid-row-start: 2; grid-column-start: 17;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="540" role="gridcell" aria-label="Mon 9:00 AM–9:10 AM: Empty" tabindex="0" title="Mon 9:00 AM–9:10 AM: Empty" style="grid-row-start: 2; grid-column-start: 18;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="550" role="gridcell" aria-label="Mon 9:10 AM–9:15 AM: Empty" tabindex="0" title="Mon 9:10 AM–9:15 AM: Empty" style="grid-row-start: 2; grid-column-start: 19;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="555" role="gridcell" aria-label="Mon 9:15 AM–9:20 AM: Empty" tabindex="0" title="Mon 9:15 AM–9:20 AM: Empty" style="grid-row-start: 2; grid-column-start: 20;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="560" role="gridcell" aria-label="Mon 9:20 AM–9:30 AM: Empty" tabindex="0" title="Mon 9:20 AM–9:30 AM: Empty" style="grid-row-start: 2; grid-column-start: 21;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="570" role="gridcell" aria-label="Mon 9:30 AM–9:40 AM: Empty" tabindex="0" title="Mon 9:30 AM–9:40 AM: Empty" style="grid-row-start: 2; grid-column-start: 22;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="580" role="gridcell" aria-label="Mon 9:40 AM–9:45 AM: Empty" tabindex="0" title="Mon 9:40 AM–9:45 AM: Empty" style="grid-row-start: 2; grid-column-start: 23;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="585" role="gridcell" aria-label="Mon 9:45 AM–9:50 AM: Empty" tabindex="0" title="Mon 9:45 AM–9:50 AM: Empty" style="grid-row-start: 2; grid-column-start: 24;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="590" role="gridcell" aria-label="Mon 9:50 AM–10:00 AM: Empty" tabindex="0" title="Mon 9:50 AM–10:00 AM: Empty" style="grid-row-start: 2; grid-column-start: 25;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="600" role="gridcell" aria-label="Mon 10:00 AM–10:10 AM: Empty" tabindex="0" title="Mon 10:00 AM–10:10 AM: Empty" style="grid-row-start: 2; grid-column-start: 26;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="610" role="gridcell" aria-label="Mon 10:10 AM–10:15 AM: Empty" tabindex="0" title="Mon 10:10 AM–10:15 AM: Empty" style="grid-row-start: 2; grid-column-start: 27;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="615" role="gridcell" aria-label="Mon 10:15 AM–10:20 AM: Empty" tabindex="0" title="Mon 10:15 AM–10:20 AM: Empty" style="grid-row-start: 2; grid-column-start: 28;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="620" role="gridcell" aria-label="Mon 10:20 AM–10:30 AM: Empty" tabindex="0" title="Mon 10:20 AM–10:30 AM: Empty" style="grid-row-start: 2; grid-column-start: 29;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="630" role="gridcell" aria-label="Mon 10:30 AM–10:40 AM: Empty" tabindex="0" title="Mon 10:30 AM–10:40 AM: Empty" style="grid-row-start: 2; grid-column-start: 30;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="640" role="gridcell" aria-label="Mon 10:40 AM–10:45 AM: Empty" tabindex="0" title="Mon 10:40 AM–10:45 AM: Empty" style="grid-row-start: 2; grid-column-start: 31;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="645" role="gridcell" aria-label="Mon 10:45 AM–10:50 AM: Empty" tabindex="0" title="Mon 10:45 AM–10:50 AM: Empty" style="grid-row-start: 2; grid-column-start: 32;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="650" role="gridcell" aria-label="Mon 10:50 AM–11:00 AM: Empty" tabindex="0" title="Mon 10:50 AM–11:00 AM: Empty" style="grid-row-start: 2; grid-column-start: 33;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="660" role="gridcell" aria-label="Mon 11:00 AM–11:10 AM: Empty" tabindex="0" title="Mon 11:00 AM–11:10 AM: Empty" style="grid-row-start: 2; grid-column-start: 34;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="670" role="gridcell" aria-label="Mon 11:10 AM–11:15 AM: Empty" tabindex="0" title="Mon 11:10 AM–11:15 AM: Empty" style="grid-row-start: 2; grid-column-start: 35;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="675" role="gridcell" aria-label="Mon 11:15 AM–11:20 AM: Empty" tabindex="0" title="Mon 11:15 AM–11:20 AM: Empty" style="grid-row-start: 2; grid-column-start: 36;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="680" role="gridcell" aria-label="Mon 11:20 AM–11:30 AM: Empty" tabindex="0" title="Mon 11:20 AM–11:30 AM: Empty" style="grid-row-start: 2; grid-column-start: 37;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="690" role="gridcell" aria-label="Mon 11:30 AM–11:40 AM: Empty" tabindex="0" title="Mon 11:30 AM–11:40 AM: Empty" style="grid-row-start: 2; grid-column-start: 38;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="700" role="gridcell" aria-label="Mon 11:40 AM–11:45 AM: Empty" tabindex="0" title="Mon 11:40 AM–11:45 AM: Empty" style="grid-row-start: 2; grid-column-start: 39;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="705" role="gridcell" aria-label="Mon 11:45 AM–11:50 AM: Empty" tabindex="0" title="Mon 11:45 AM–11:50 AM: Empty" style="grid-row-start: 2; grid-column-start: 40;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="710" role="gridcell" aria-label="Mon 11:50 AM–12:00 PM: Empty" tabindex="0" title="Mon 11:50 AM–12:00 PM: Empty" style="grid-row-start: 2; grid-column-start: 41;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="720" role="gridcell" aria-label="Mon 12:00 PM–12:10 PM: Empty" tabindex="0" title="Mon 12:00 PM–12:10 PM: Empty" style="grid-row-start: 2; grid-column-start: 42;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="730" role="gridcell" aria-label="Mon 12:10 PM–12:15 PM: Empty" tabindex="0" title="Mon 12:10 PM–12:15 PM: Empty" style="grid-row-start: 2; grid-column-start: 43;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="735" role="gridcell" aria-label="Mon 12:15 PM–12:20 PM: Empty" tabindex="0" title="Mon 12:15 PM–12:20 PM: Empty" style="grid-row-start: 2; grid-column-start: 44;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="740" role="gridcell" aria-label="Mon 12:20 PM–12:30 PM: Empty" tabindex="0" title="Mon 12:20 PM–12:30 PM: Empty" style="grid-row-start: 2; grid-column-start: 45;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="750" role="gridcell" aria-label="Mon 12:30 PM–12:40 PM: Empty" tabindex="0" title="Mon 12:30 PM–12:40 PM: Empty" style="grid-row-start: 2; grid-column-start: 46;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="760" role="gridcell" aria-label="Mon 12:40 PM–12:45 PM: Empty" tabindex="0" title="Mon 12:40 PM–12:45 PM: Empty" style="grid-row-start: 2; grid-column-start: 47;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="765" role="gridcell" aria-label="Mon 12:45 PM–12:50 PM: Empty" tabindex="0" title="Mon 12:45 PM–12:50 PM: Empty" style="grid-row-start: 2; grid-column-start: 48;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="770" role="gridcell" aria-label="Mon 12:50 PM–1:00 PM: Empty" tabindex="0" title="Mon 12:50 PM–1:00 PM: Empty" style="grid-row-start: 2; grid-column-start: 49;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="780" role="gridcell" aria-label="Mon 1:00 PM–1:10 PM: Empty" tabindex="0" title="Mon 1:00 PM–1:10 PM: Empty" style="grid-row-start: 2; grid-column-start: 50;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="790" role="gridcell" aria-label="Mon 1:10 PM–1:15 PM: Empty" tabindex="0" title="Mon 1:10 PM–1:15 PM: Empty" style="grid-row-start: 2; grid-column-start: 51;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="795" role="gridcell" aria-label="Mon 1:15 PM–1:20 PM: Normal schedule" tabindex="0" title="Mon 1:15 PM–1:20 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 52;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="800" role="gridcell" aria-label="Mon 1:20 PM–1:30 PM: Normal schedule" tabindex="0" title="Mon 1:20 PM–1:30 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 53;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="810" role="gridcell" aria-label="Mon 1:30 PM–1:40 PM: Normal schedule" tabindex="0" title="Mon 1:30 PM–1:40 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 54;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="820" role="gridcell" aria-label="Mon 1:40 PM–1:45 PM: Normal schedule" tabindex="0" title="Mon 1:40 PM–1:45 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 55;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="825" role="gridcell" aria-label="Mon 1:45 PM–1:50 PM: Normal schedule" tabindex="0" title="Mon 1:45 PM–1:50 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 56;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="830" role="gridcell" aria-label="Mon 1:50 PM–2:00 PM: Normal schedule" tabindex="0" title="Mon 1:50 PM–2:00 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 57;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="840" role="gridcell" aria-label="Mon 2:00 PM–2:10 PM: Normal schedule" tabindex="0" title="Mon 2:00 PM–2:10 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 58;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="850" role="gridcell" aria-label="Mon 2:10 PM–2:15 PM: Normal schedule" tabindex="0" title="Mon 2:10 PM–2:15 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 59;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="855" role="gridcell" aria-label="Mon 2:15 PM–2:20 PM: Normal schedule" tabindex="0" title="Mon 2:15 PM–2:20 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 60;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="860" role="gridcell" aria-label="Mon 2:20 PM–2:30 PM: Normal schedule" tabindex="0" title="Mon 2:20 PM–2:30 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 61;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="870" role="gridcell" aria-label="Mon 2:30 PM–2:40 PM: Normal schedule" tabindex="0" title="Mon 2:30 PM–2:40 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 62;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="880" role="gridcell" aria-label="Mon 2:40 PM–2:45 PM: Normal schedule" tabindex="0" title="Mon 2:40 PM–2:45 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 63;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="885" role="gridcell" aria-label="Mon 2:45 PM–2:50 PM: Normal schedule" tabindex="0" title="Mon 2:45 PM–2:50 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 64;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="890" role="gridcell" aria-label="Mon 2:50 PM–3:00 PM: Normal schedule" tabindex="0" title="Mon 2:50 PM–3:00 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 65;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="900" role="gridcell" aria-label="Mon 3:00 PM–3:10 PM: Normal schedule" tabindex="0" title="Mon 3:00 PM–3:10 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 66;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="910" role="gridcell" aria-label="Mon 3:10 PM–3:15 PM: Normal schedule" tabindex="0" title="Mon 3:10 PM–3:15 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 67;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="915" role="gridcell" aria-label="Mon 3:15 PM–3:20 PM: Normal schedule" tabindex="0" title="Mon 3:15 PM–3:20 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 68;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="920" role="gridcell" aria-label="Mon 3:20 PM–3:30 PM: Normal schedule" tabindex="0" title="Mon 3:20 PM–3:30 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 69;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="930" role="gridcell" aria-label="Mon 3:30 PM–3:40 PM: Normal schedule" tabindex="0" title="Mon 3:30 PM–3:40 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 70;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="940" role="gridcell" aria-label="Mon 3:40 PM–3:45 PM: Normal schedule" tabindex="0" title="Mon 3:40 PM–3:45 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 71;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="945" role="gridcell" aria-label="Mon 3:45 PM–3:50 PM: Normal schedule" tabindex="0" title="Mon 3:45 PM–3:50 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 72;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="950" role="gridcell" aria-label="Mon 3:50 PM–4:00 PM: Normal schedule" tabindex="0" title="Mon 3:50 PM–4:00 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 73;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="960" role="gridcell" aria-label="Mon 4:00 PM–4:10 PM: Normal schedule" tabindex="0" title="Mon 4:00 PM–4:10 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 74;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="970" role="gridcell" aria-label="Mon 4:10 PM–4:15 PM: Normal schedule" tabindex="0" title="Mon 4:10 PM–4:15 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 75;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="975" role="gridcell" aria-label="Mon 4:15 PM–4:20 PM: Normal schedule" tabindex="0" title="Mon 4:15 PM–4:20 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 76;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="980" role="gridcell" aria-label="Mon 4:20 PM–4:30 PM: Normal schedule" tabindex="0" title="Mon 4:20 PM–4:30 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 77;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="990" role="gridcell" aria-label="Mon 4:30 PM–4:40 PM: Normal schedule" tabindex="0" title="Mon 4:30 PM–4:40 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 78;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="1000" role="gridcell" aria-label="Mon 4:40 PM–4:45 PM: Normal schedule" tabindex="0" title="Mon 4:40 PM–4:45 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 79;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="1005" role="gridcell" aria-label="Mon 4:45 PM–4:50 PM: Normal schedule" tabindex="0" title="Mon 4:45 PM–4:50 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 80;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="1010" role="gridcell" aria-label="Mon 4:50 PM–5:00 PM: Normal schedule" tabindex="0" title="Mon 4:50 PM–5:00 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 81;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="1020" role="gridcell" aria-label="Mon 5:00 PM–5:10 PM: Normal schedule" tabindex="0" title="Mon 5:00 PM–5:10 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 82;"></div><div class="schedule-cell bg-blue-slot" data-day="Mon" data-minute="1030" role="gridcell" aria-label="Mon 5:10 PM–5:15 PM: Normal schedule" tabindex="0" title="Mon 5:10 PM–5:15 PM: Normal schedule" style="grid-row-start: 2; grid-column-start: 83;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1035" role="gridcell" aria-label="Mon 5:15 PM–5:20 PM: Empty" tabindex="0" title="Mon 5:15 PM–5:20 PM: Empty" style="grid-row-start: 2; grid-column-start: 84;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1040" role="gridcell" aria-label="Mon 5:20 PM–5:30 PM: Empty" tabindex="0" title="Mon 5:20 PM–5:30 PM: Empty" style="grid-row-start: 2; grid-column-start: 85;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1050" role="gridcell" aria-label="Mon 5:30 PM–5:40 PM: Empty" tabindex="0" title="Mon 5:30 PM–5:40 PM: Empty" style="grid-row-start: 2; grid-column-start: 86;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1060" role="gridcell" aria-label="Mon 5:40 PM–5:45 PM: Empty" tabindex="0" title="Mon 5:40 PM–5:45 PM: Empty" style="grid-row-start: 2; grid-column-start: 87;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1065" role="gridcell" aria-label="Mon 5:45 PM–5:50 PM: Empty" tabindex="0" title="Mon 5:45 PM–5:50 PM: Empty" style="grid-row-start: 2; grid-column-start: 88;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1070" role="gridcell" aria-label="Mon 5:50 PM–6:00 PM: Empty" tabindex="0" title="Mon 5:50 PM–6:00 PM: Empty" style="grid-row-start: 2; grid-column-start: 89;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1080" role="gridcell" aria-label="Mon 6:00 PM–6:10 PM: Empty" tabindex="0" title="Mon 6:00 PM–6:10 PM: Empty" style="grid-row-start: 2; grid-column-start: 90;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1090" role="gridcell" aria-label="Mon 6:10 PM–6:15 PM: Empty" tabindex="0" title="Mon 6:10 PM–6:15 PM: Empty" style="grid-row-start: 2; grid-column-start: 91;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1095" role="gridcell" aria-label="Mon 6:15 PM–6:20 PM: Empty" tabindex="0" title="Mon 6:15 PM–6:20 PM: Empty" style="grid-row-start: 2; grid-column-start: 92;"></div><div class="schedule-cell bg-empty-slot" data-day="Mon" data-minute="1100" role="gridcell" aria-label="Mon 6:20 PM–6:30 PM: Empty" tabindex="0" title="Mon 6:20 PM–6:30 PM: Empty" style="grid-row-start: 2; grid-column-start: 93;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="1110" role="gridcell" aria-label="Mon 6:30 PM–6:40 PM: Unavailable" tabindex="-1" title="Mon 6:30 PM–6:40 PM: Unavailable" style="grid-row-start: 2; grid-column-start: 94;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="1120" role="gridcell" aria-label="Mon 6:40 PM–6:45 PM: Unavailable" tabindex="-1" title="Mon 6:40 PM–6:45 PM: Unavailable" style="grid-row-start: 2; grid-column-start: 95;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="1125" role="gridcell" aria-label="Mon 6:45 PM–6:50 PM: Unavailable" tabindex="-1" title="Mon 6:45 PM–6:50 PM: Unavailable" style="grid-row-start: 2; grid-column-start: 96;"></div><div class="schedule-cell bg-unselectable" data-day="Mon" data-minute="1130" role="gridcell" aria-label="Mon 6:50 PM–7:00 PM: Unavailable" tabindex="-1" title="Mon 6:50 PM–7:00 PM: Unavailable" style="grid-row-start: 2; grid-column-start: 97;"></div><div class="shift-label start-label" style="grid-row-start: 2; grid-column-start: 52;">1:15</div><div class="shift-label end-label" style="grid-row-start: 2; grid-column-start: 84;">5:15</div><div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours-Mon" class="schedule-cell day-total-hours" style="grid-row-start: 2; grid-column-start: 98;"><strong>4.00 hrs</strong></div><div class="day-label" style="grid-row-start: 3; grid-column-start: 1;">Tue</div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="420" role="gridcell" aria-label="Tue 7:00 AM–7:10 AM: Unavailable" tabindex="-1" title="Tue 7:00 AM–7:10 AM: Unavailable" style="grid-row-start: 3; grid-column-start: 2;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="430" role="gridcell" aria-label="Tue 7:10 AM–7:15 AM: Unavailable" tabindex="-1" title="Tue 7:10 AM–7:15 AM: Unavailable" style="grid-row-start: 3; grid-column-start: 3;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="435" role="gridcell" aria-label="Tue 7:15 AM–7:20 AM: Unavailable" tabindex="-1" title="Tue 7:15 AM–7:20 AM: Unavailable" style="grid-row-start: 3; grid-column-start: 4;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="440" role="gridcell" aria-label="Tue 7:20 AM–7:30 AM: Unavailable" tabindex="-1" title="Tue 7:20 AM–7:30 AM: Unavailable" style="grid-row-start: 3; grid-column-start: 5;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="450" role="gridcell" aria-label="Tue 7:30 AM–7:40 AM: Empty" tabindex="0" title="Tue 7:30 AM–7:40 AM: Empty" style="grid-row-start: 3; grid-column-start: 6;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="460" role="gridcell" aria-label="Tue 7:40 AM–7:45 AM: Empty" tabindex="0" title="Tue 7:40 AM–7:45 AM: Empty" style="grid-row-start: 3; grid-column-start: 7;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="465" role="gridcell" aria-label="Tue 7:45 AM–7:50 AM: Normal schedule" tabindex="0" title="Tue 7:45 AM–7:50 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 8;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="470" role="gridcell" aria-label="Tue 7:50 AM–8:00 AM: Normal schedule" tabindex="0" title="Tue 7:50 AM–8:00 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 9;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="480" role="gridcell" aria-label="Tue 8:00 AM–8:10 AM: Normal schedule" tabindex="0" title="Tue 8:00 AM–8:10 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 10;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="490" role="gridcell" aria-label="Tue 8:10 AM–8:15 AM: Normal schedule" tabindex="0" title="Tue 8:10 AM–8:15 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 11;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="495" role="gridcell" aria-label="Tue 8:15 AM–8:20 AM: Normal schedule" tabindex="0" title="Tue 8:15 AM–8:20 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 12;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="500" role="gridcell" aria-label="Tue 8:20 AM–8:30 AM: Normal schedule" tabindex="0" title="Tue 8:20 AM–8:30 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 13;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="510" role="gridcell" aria-label="Tue 8:30 AM–8:40 AM: Normal schedule" tabindex="0" title="Tue 8:30 AM–8:40 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 14;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="520" role="gridcell" aria-label="Tue 8:40 AM–8:45 AM: Normal schedule" tabindex="0" title="Tue 8:40 AM–8:45 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 15;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="525" role="gridcell" aria-label="Tue 8:45 AM–8:50 AM: Normal schedule" tabindex="0" title="Tue 8:45 AM–8:50 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 16;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="530" role="gridcell" aria-label="Tue 8:50 AM–9:00 AM: Normal schedule" tabindex="0" title="Tue 8:50 AM–9:00 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 17;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="540" role="gridcell" aria-label="Tue 9:00 AM–9:10 AM: Normal schedule" tabindex="0" title="Tue 9:00 AM–9:10 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 18;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="550" role="gridcell" aria-label="Tue 9:10 AM–9:15 AM: Normal schedule" tabindex="0" title="Tue 9:10 AM–9:15 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 19;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="555" role="gridcell" aria-label="Tue 9:15 AM–9:20 AM: Normal schedule" tabindex="0" title="Tue 9:15 AM–9:20 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 20;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="560" role="gridcell" aria-label="Tue 9:20 AM–9:30 AM: Normal schedule" tabindex="0" title="Tue 9:20 AM–9:30 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 21;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="570" role="gridcell" aria-label="Tue 9:30 AM–9:40 AM: Normal schedule" tabindex="0" title="Tue 9:30 AM–9:40 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 22;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="580" role="gridcell" aria-label="Tue 9:40 AM–9:45 AM: Normal schedule" tabindex="0" title="Tue 9:40 AM–9:45 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 23;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="585" role="gridcell" aria-label="Tue 9:45 AM–9:50 AM: Normal schedule" tabindex="0" title="Tue 9:45 AM–9:50 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 24;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="590" role="gridcell" aria-label="Tue 9:50 AM–10:00 AM: Normal schedule" tabindex="0" title="Tue 9:50 AM–10:00 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 25;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="600" role="gridcell" aria-label="Tue 10:00 AM–10:10 AM: Normal schedule" tabindex="0" title="Tue 10:00 AM–10:10 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 26;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="610" role="gridcell" aria-label="Tue 10:10 AM–10:15 AM: Normal schedule" tabindex="0" title="Tue 10:10 AM–10:15 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 27;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="615" role="gridcell" aria-label="Tue 10:15 AM–10:20 AM: Normal schedule" tabindex="0" title="Tue 10:15 AM–10:20 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 28;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="620" role="gridcell" aria-label="Tue 10:20 AM–10:30 AM: Normal schedule" tabindex="0" title="Tue 10:20 AM–10:30 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 29;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="630" role="gridcell" aria-label="Tue 10:30 AM–10:40 AM: Normal schedule" tabindex="0" title="Tue 10:30 AM–10:40 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 30;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="640" role="gridcell" aria-label="Tue 10:40 AM–10:45 AM: Normal schedule" tabindex="0" title="Tue 10:40 AM–10:45 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 31;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="645" role="gridcell" aria-label="Tue 10:45 AM–10:50 AM: Normal schedule" tabindex="0" title="Tue 10:45 AM–10:50 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 32;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="650" role="gridcell" aria-label="Tue 10:50 AM–11:00 AM: Normal schedule" tabindex="0" title="Tue 10:50 AM–11:00 AM: Normal schedule" style="grid-row-start: 3; grid-column-start: 33;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="660" role="gridcell" aria-label="Tue 11:00 AM–11:10 AM: Empty" tabindex="0" title="Tue 11:00 AM–11:10 AM: Empty" style="grid-row-start: 3; grid-column-start: 34;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="670" role="gridcell" aria-label="Tue 11:10 AM–11:15 AM: Empty" tabindex="0" title="Tue 11:10 AM–11:15 AM: Empty" style="grid-row-start: 3; grid-column-start: 35;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="675" role="gridcell" aria-label="Tue 11:15 AM–11:20 AM: Empty" tabindex="0" title="Tue 11:15 AM–11:20 AM: Empty" style="grid-row-start: 3; grid-column-start: 36;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="680" role="gridcell" aria-label="Tue 11:20 AM–11:30 AM: Empty" tabindex="0" title="Tue 11:20 AM–11:30 AM: Empty" style="grid-row-start: 3; grid-column-start: 37;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="690" role="gridcell" aria-label="Tue 11:30 AM–11:40 AM: Empty" tabindex="0" title="Tue 11:30 AM–11:40 AM: Empty" style="grid-row-start: 3; grid-column-start: 38;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="700" role="gridcell" aria-label="Tue 11:40 AM–11:45 AM: Empty" tabindex="0" title="Tue 11:40 AM–11:45 AM: Empty" style="grid-row-start: 3; grid-column-start: 39;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="705" role="gridcell" aria-label="Tue 11:45 AM–11:50 AM: Empty" tabindex="0" title="Tue 11:45 AM–11:50 AM: Empty" style="grid-row-start: 3; grid-column-start: 40;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="710" role="gridcell" aria-label="Tue 11:50 AM–12:00 PM: Empty" tabindex="0" title="Tue 11:50 AM–12:00 PM: Empty" style="grid-row-start: 3; grid-column-start: 41;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="720" role="gridcell" aria-label="Tue 12:00 PM–12:10 PM: Normal schedule" tabindex="0" title="Tue 12:00 PM–12:10 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 42;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="730" role="gridcell" aria-label="Tue 12:10 PM–12:15 PM: Normal schedule" tabindex="0" title="Tue 12:10 PM–12:15 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 43;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="735" role="gridcell" aria-label="Tue 12:15 PM–12:20 PM: Normal schedule" tabindex="0" title="Tue 12:15 PM–12:20 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 44;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="740" role="gridcell" aria-label="Tue 12:20 PM–12:30 PM: Normal schedule" tabindex="0" title="Tue 12:20 PM–12:30 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 45;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="750" role="gridcell" aria-label="Tue 12:30 PM–12:40 PM: Normal schedule" tabindex="0" title="Tue 12:30 PM–12:40 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 46;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="760" role="gridcell" aria-label="Tue 12:40 PM–12:45 PM: Normal schedule" tabindex="0" title="Tue 12:40 PM–12:45 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 47;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="765" role="gridcell" aria-label="Tue 12:45 PM–12:50 PM: Normal schedule" tabindex="0" title="Tue 12:45 PM–12:50 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 48;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="770" role="gridcell" aria-label="Tue 12:50 PM–1:00 PM: Normal schedule" tabindex="0" title="Tue 12:50 PM–1:00 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 49;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="780" role="gridcell" aria-label="Tue 1:00 PM–1:10 PM: Normal schedule" tabindex="0" title="Tue 1:00 PM–1:10 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 50;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="790" role="gridcell" aria-label="Tue 1:10 PM–1:15 PM: Normal schedule" tabindex="0" title="Tue 1:10 PM–1:15 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 51;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="795" role="gridcell" aria-label="Tue 1:15 PM–1:20 PM: Normal schedule" tabindex="0" title="Tue 1:15 PM–1:20 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 52;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="800" role="gridcell" aria-label="Tue 1:20 PM–1:30 PM: Normal schedule" tabindex="0" title="Tue 1:20 PM–1:30 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 53;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="810" role="gridcell" aria-label="Tue 1:30 PM–1:40 PM: Normal schedule" tabindex="0" title="Tue 1:30 PM–1:40 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 54;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="820" role="gridcell" aria-label="Tue 1:40 PM–1:45 PM: Normal schedule" tabindex="0" title="Tue 1:40 PM–1:45 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 55;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="825" role="gridcell" aria-label="Tue 1:45 PM–1:50 PM: Normal schedule" tabindex="0" title="Tue 1:45 PM–1:50 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 56;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="830" role="gridcell" aria-label="Tue 1:50 PM–2:00 PM: Normal schedule" tabindex="0" title="Tue 1:50 PM–2:00 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 57;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="840" role="gridcell" aria-label="Tue 2:00 PM–2:10 PM: Normal schedule" tabindex="0" title="Tue 2:00 PM–2:10 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 58;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="850" role="gridcell" aria-label="Tue 2:10 PM–2:15 PM: Normal schedule" tabindex="0" title="Tue 2:10 PM–2:15 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 59;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="855" role="gridcell" aria-label="Tue 2:15 PM–2:20 PM: Normal schedule" tabindex="0" title="Tue 2:15 PM–2:20 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 60;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="860" role="gridcell" aria-label="Tue 2:20 PM–2:30 PM: Normal schedule" tabindex="0" title="Tue 2:20 PM–2:30 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 61;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="870" role="gridcell" aria-label="Tue 2:30 PM–2:40 PM: Normal schedule" tabindex="0" title="Tue 2:30 PM–2:40 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 62;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="880" role="gridcell" aria-label="Tue 2:40 PM–2:45 PM: Normal schedule" tabindex="0" title="Tue 2:40 PM–2:45 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 63;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="885" role="gridcell" aria-label="Tue 2:45 PM–2:50 PM: Normal schedule" tabindex="0" title="Tue 2:45 PM–2:50 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 64;"></div><div class="schedule-cell bg-blue-slot" data-day="Tue" data-minute="890" role="gridcell" aria-label="Tue 2:50 PM–3:00 PM: Normal schedule" tabindex="0" title="Tue 2:50 PM–3:00 PM: Normal schedule" style="grid-row-start: 3; grid-column-start: 65;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="900" role="gridcell" aria-label="Tue 3:00 PM–3:10 PM: Empty" tabindex="0" title="Tue 3:00 PM–3:10 PM: Empty" style="grid-row-start: 3; grid-column-start: 66;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="910" role="gridcell" aria-label="Tue 3:10 PM–3:15 PM: Empty" tabindex="0" title="Tue 3:10 PM–3:15 PM: Empty" style="grid-row-start: 3; grid-column-start: 67;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="915" role="gridcell" aria-label="Tue 3:15 PM–3:20 PM: Empty" tabindex="0" title="Tue 3:15 PM–3:20 PM: Empty" style="grid-row-start: 3; grid-column-start: 68;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="920" role="gridcell" aria-label="Tue 3:20 PM–3:30 PM: Empty" tabindex="0" title="Tue 3:20 PM–3:30 PM: Empty" style="grid-row-start: 3; grid-column-start: 69;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="930" role="gridcell" aria-label="Tue 3:30 PM–3:40 PM: Empty" tabindex="0" title="Tue 3:30 PM–3:40 PM: Empty" style="grid-row-start: 3; grid-column-start: 70;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="940" role="gridcell" aria-label="Tue 3:40 PM–3:45 PM: Empty" tabindex="0" title="Tue 3:40 PM–3:45 PM: Empty" style="grid-row-start: 3; grid-column-start: 71;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="945" role="gridcell" aria-label="Tue 3:45 PM–3:50 PM: Empty" tabindex="0" title="Tue 3:45 PM–3:50 PM: Empty" style="grid-row-start: 3; grid-column-start: 72;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="950" role="gridcell" aria-label="Tue 3:50 PM–4:00 PM: Empty" tabindex="0" title="Tue 3:50 PM–4:00 PM: Empty" style="grid-row-start: 3; grid-column-start: 73;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="960" role="gridcell" aria-label="Tue 4:00 PM–4:10 PM: Empty" tabindex="0" title="Tue 4:00 PM–4:10 PM: Empty" style="grid-row-start: 3; grid-column-start: 74;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="970" role="gridcell" aria-label="Tue 4:10 PM–4:15 PM: Empty" tabindex="0" title="Tue 4:10 PM–4:15 PM: Empty" style="grid-row-start: 3; grid-column-start: 75;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="975" role="gridcell" aria-label="Tue 4:15 PM–4:20 PM: Empty" tabindex="0" title="Tue 4:15 PM–4:20 PM: Empty" style="grid-row-start: 3; grid-column-start: 76;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="980" role="gridcell" aria-label="Tue 4:20 PM–4:30 PM: Empty" tabindex="0" title="Tue 4:20 PM–4:30 PM: Empty" style="grid-row-start: 3; grid-column-start: 77;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="990" role="gridcell" aria-label="Tue 4:30 PM–4:40 PM: Empty" tabindex="0" title="Tue 4:30 PM–4:40 PM: Empty" style="grid-row-start: 3; grid-column-start: 78;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1000" role="gridcell" aria-label="Tue 4:40 PM–4:45 PM: Empty" tabindex="0" title="Tue 4:40 PM–4:45 PM: Empty" style="grid-row-start: 3; grid-column-start: 79;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1005" role="gridcell" aria-label="Tue 4:45 PM–4:50 PM: Empty" tabindex="0" title="Tue 4:45 PM–4:50 PM: Empty" style="grid-row-start: 3; grid-column-start: 80;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1010" role="gridcell" aria-label="Tue 4:50 PM–5:00 PM: Empty" tabindex="0" title="Tue 4:50 PM–5:00 PM: Empty" style="grid-row-start: 3; grid-column-start: 81;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1020" role="gridcell" aria-label="Tue 5:00 PM–5:10 PM: Empty" tabindex="0" title="Tue 5:00 PM–5:10 PM: Empty" style="grid-row-start: 3; grid-column-start: 82;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1030" role="gridcell" aria-label="Tue 5:10 PM–5:15 PM: Empty" tabindex="0" title="Tue 5:10 PM–5:15 PM: Empty" style="grid-row-start: 3; grid-column-start: 83;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1035" role="gridcell" aria-label="Tue 5:15 PM–5:20 PM: Empty" tabindex="0" title="Tue 5:15 PM–5:20 PM: Empty" style="grid-row-start: 3; grid-column-start: 84;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1040" role="gridcell" aria-label="Tue 5:20 PM–5:30 PM: Empty" tabindex="0" title="Tue 5:20 PM–5:30 PM: Empty" style="grid-row-start: 3; grid-column-start: 85;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1050" role="gridcell" aria-label="Tue 5:30 PM–5:40 PM: Empty" tabindex="0" title="Tue 5:30 PM–5:40 PM: Empty" style="grid-row-start: 3; grid-column-start: 86;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1060" role="gridcell" aria-label="Tue 5:40 PM–5:45 PM: Empty" tabindex="0" title="Tue 5:40 PM–5:45 PM: Empty" style="grid-row-start: 3; grid-column-start: 87;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1065" role="gridcell" aria-label="Tue 5:45 PM–5:50 PM: Empty" tabindex="0" title="Tue 5:45 PM–5:50 PM: Empty" style="grid-row-start: 3; grid-column-start: 88;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1070" role="gridcell" aria-label="Tue 5:50 PM–6:00 PM: Empty" tabindex="0" title="Tue 5:50 PM–6:00 PM: Empty" style="grid-row-start: 3; grid-column-start: 89;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1080" role="gridcell" aria-label="Tue 6:00 PM–6:10 PM: Empty" tabindex="0" title="Tue 6:00 PM–6:10 PM: Empty" style="grid-row-start: 3; grid-column-start: 90;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1090" role="gridcell" aria-label="Tue 6:10 PM–6:15 PM: Empty" tabindex="0" title="Tue 6:10 PM–6:15 PM: Empty" style="grid-row-start: 3; grid-column-start: 91;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1095" role="gridcell" aria-label="Tue 6:15 PM–6:20 PM: Empty" tabindex="0" title="Tue 6:15 PM–6:20 PM: Empty" style="grid-row-start: 3; grid-column-start: 92;"></div><div class="schedule-cell bg-empty-slot" data-day="Tue" data-minute="1100" role="gridcell" aria-label="Tue 6:20 PM–6:30 PM: Empty" tabindex="0" title="Tue 6:20 PM–6:30 PM: Empty" style="grid-row-start: 3; grid-column-start: 93;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="1110" role="gridcell" aria-label="Tue 6:30 PM–6:40 PM: Unavailable" tabindex="-1" title="Tue 6:30 PM–6:40 PM: Unavailable" style="grid-row-start: 3; grid-column-start: 94;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="1120" role="gridcell" aria-label="Tue 6:40 PM–6:45 PM: Unavailable" tabindex="-1" title="Tue 6:40 PM–6:45 PM: Unavailable" style="grid-row-start: 3; grid-column-start: 95;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="1125" role="gridcell" aria-label="Tue 6:45 PM–6:50 PM: Unavailable" tabindex="-1" title="Tue 6:45 PM–6:50 PM: Unavailable" style="grid-row-start: 3; grid-column-start: 96;"></div><div class="schedule-cell bg-unselectable" data-day="Tue" data-minute="1130" role="gridcell" aria-label="Tue 6:50 PM–7:00 PM: Unavailable" tabindex="-1" title="Tue 6:50 PM–7:00 PM: Unavailable" style="grid-row-start: 3; grid-column-start: 97;"></div><div class="shift-label start-label" style="grid-row-start: 3; grid-column-start: 8;">7:45</div><div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours-Tue" class="schedule-cell day-total-hours" style="grid-row-start: 3; grid-column-start: 98;"><strong>6.25 hrs</strong></div><div class="day-label" style="grid-row-start: 4; grid-column-start: 1;">Wed</div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="420" role="gridcell" aria-label="Wed 7:00 AM–7:10 AM: Unavailable" tabindex="-1" title="Wed 7:00 AM–7:10 AM: Unavailable" style="grid-row-start: 4; grid-column-start: 2;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="430" role="gridcell" aria-label="Wed 7:10 AM–7:15 AM: Unavailable" tabindex="-1" title="Wed 7:10 AM–7:15 AM: Unavailable" style="grid-row-start: 4; grid-column-start: 3;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="435" role="gridcell" aria-label="Wed 7:15 AM–7:20 AM: Unavailable" tabindex="-1" title="Wed 7:15 AM–7:20 AM: Unavailable" style="grid-row-start: 4; grid-column-start: 4;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="440" role="gridcell" aria-label="Wed 7:20 AM–7:30 AM: Unavailable" tabindex="-1" title="Wed 7:20 AM–7:30 AM: Unavailable" style="grid-row-start: 4; grid-column-start: 5;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="450" role="gridcell" aria-label="Wed 7:30 AM–7:40 AM: Empty" tabindex="0" title="Wed 7:30 AM–7:40 AM: Empty" style="grid-row-start: 4; grid-column-start: 6;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="460" role="gridcell" aria-label="Wed 7:40 AM–7:45 AM: Empty" tabindex="0" title="Wed 7:40 AM–7:45 AM: Empty" style="grid-row-start: 4; grid-column-start: 7;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="465" role="gridcell" aria-label="Wed 7:45 AM–7:50 AM: Empty" tabindex="0" title="Wed 7:45 AM–7:50 AM: Empty" style="grid-row-start: 4; grid-column-start: 8;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="470" role="gridcell" aria-label="Wed 7:50 AM–8:00 AM: Empty" tabindex="0" title="Wed 7:50 AM–8:00 AM: Empty" style="grid-row-start: 4; grid-column-start: 9;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="480" role="gridcell" aria-label="Wed 8:00 AM–8:10 AM: Empty" tabindex="0" title="Wed 8:00 AM–8:10 AM: Empty" style="grid-row-start: 4; grid-column-start: 10;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="490" role="gridcell" aria-label="Wed 8:10 AM–8:15 AM: Empty" tabindex="0" title="Wed 8:10 AM–8:15 AM: Empty" style="grid-row-start: 4; grid-column-start: 11;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="495" role="gridcell" aria-label="Wed 8:15 AM–8:20 AM: Empty" tabindex="0" title="Wed 8:15 AM–8:20 AM: Empty" style="grid-row-start: 4; grid-column-start: 12;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="500" role="gridcell" aria-label="Wed 8:20 AM–8:30 AM: Empty" tabindex="0" title="Wed 8:20 AM–8:30 AM: Empty" style="grid-row-start: 4; grid-column-start: 13;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="510" role="gridcell" aria-label="Wed 8:30 AM–8:40 AM: Empty" tabindex="0" title="Wed 8:30 AM–8:40 AM: Empty" style="grid-row-start: 4; grid-column-start: 14;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="520" role="gridcell" aria-label="Wed 8:40 AM–8:45 AM: Empty" tabindex="0" title="Wed 8:40 AM–8:45 AM: Empty" style="grid-row-start: 4; grid-column-start: 15;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="525" role="gridcell" aria-label="Wed 8:45 AM–8:50 AM: Empty" tabindex="0" title="Wed 8:45 AM–8:50 AM: Empty" style="grid-row-start: 4; grid-column-start: 16;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="530" role="gridcell" aria-label="Wed 8:50 AM–9:00 AM: Empty" tabindex="0" title="Wed 8:50 AM–9:00 AM: Empty" style="grid-row-start: 4; grid-column-start: 17;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="540" role="gridcell" aria-label="Wed 9:00 AM–9:10 AM: Empty" tabindex="0" title="Wed 9:00 AM–9:10 AM: Empty" style="grid-row-start: 4; grid-column-start: 18;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="550" role="gridcell" aria-label="Wed 9:10 AM–9:15 AM: Empty" tabindex="0" title="Wed 9:10 AM–9:15 AM: Empty" style="grid-row-start: 4; grid-column-start: 19;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="555" role="gridcell" aria-label="Wed 9:15 AM–9:20 AM: Empty" tabindex="0" title="Wed 9:15 AM–9:20 AM: Empty" style="grid-row-start: 4; grid-column-start: 20;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="560" role="gridcell" aria-label="Wed 9:20 AM–9:30 AM: Empty" tabindex="0" title="Wed 9:20 AM–9:30 AM: Empty" style="grid-row-start: 4; grid-column-start: 21;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="570" role="gridcell" aria-label="Wed 9:30 AM–9:40 AM: Empty" tabindex="0" title="Wed 9:30 AM–9:40 AM: Empty" style="grid-row-start: 4; grid-column-start: 22;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="580" role="gridcell" aria-label="Wed 9:40 AM–9:45 AM: Empty" tabindex="0" title="Wed 9:40 AM–9:45 AM: Empty" style="grid-row-start: 4; grid-column-start: 23;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="585" role="gridcell" aria-label="Wed 9:45 AM–9:50 AM: Empty" tabindex="0" title="Wed 9:45 AM–9:50 AM: Empty" style="grid-row-start: 4; grid-column-start: 24;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="590" role="gridcell" aria-label="Wed 9:50 AM–10:00 AM: Empty" tabindex="0" title="Wed 9:50 AM–10:00 AM: Empty" style="grid-row-start: 4; grid-column-start: 25;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="600" role="gridcell" aria-label="Wed 10:00 AM–10:10 AM: Empty" tabindex="0" title="Wed 10:00 AM–10:10 AM: Empty" style="grid-row-start: 4; grid-column-start: 26;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="610" role="gridcell" aria-label="Wed 10:10 AM–10:15 AM: Empty" tabindex="0" title="Wed 10:10 AM–10:15 AM: Empty" style="grid-row-start: 4; grid-column-start: 27;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="615" role="gridcell" aria-label="Wed 10:15 AM–10:20 AM: Empty" tabindex="0" title="Wed 10:15 AM–10:20 AM: Empty" style="grid-row-start: 4; grid-column-start: 28;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="620" role="gridcell" aria-label="Wed 10:20 AM–10:30 AM: Empty" tabindex="0" title="Wed 10:20 AM–10:30 AM: Empty" style="grid-row-start: 4; grid-column-start: 29;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="630" role="gridcell" aria-label="Wed 10:30 AM–10:40 AM: Empty" tabindex="0" title="Wed 10:30 AM–10:40 AM: Empty" style="grid-row-start: 4; grid-column-start: 30;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="640" role="gridcell" aria-label="Wed 10:40 AM–10:45 AM: Empty" tabindex="0" title="Wed 10:40 AM–10:45 AM: Empty" style="grid-row-start: 4; grid-column-start: 31;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="645" role="gridcell" aria-label="Wed 10:45 AM–10:50 AM: Empty" tabindex="0" title="Wed 10:45 AM–10:50 AM: Empty" style="grid-row-start: 4; grid-column-start: 32;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="650" role="gridcell" aria-label="Wed 10:50 AM–11:00 AM: Empty" tabindex="0" title="Wed 10:50 AM–11:00 AM: Empty" style="grid-row-start: 4; grid-column-start: 33;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="660" role="gridcell" aria-label="Wed 11:00 AM–11:10 AM: Empty" tabindex="0" title="Wed 11:00 AM–11:10 AM: Empty" style="grid-row-start: 4; grid-column-start: 34;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="670" role="gridcell" aria-label="Wed 11:10 AM–11:15 AM: Empty" tabindex="0" title="Wed 11:10 AM–11:15 AM: Empty" style="grid-row-start: 4; grid-column-start: 35;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="675" role="gridcell" aria-label="Wed 11:15 AM–11:20 AM: Empty" tabindex="0" title="Wed 11:15 AM–11:20 AM: Empty" style="grid-row-start: 4; grid-column-start: 36;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="680" role="gridcell" aria-label="Wed 11:20 AM–11:30 AM: Empty" tabindex="0" title="Wed 11:20 AM–11:30 AM: Empty" style="grid-row-start: 4; grid-column-start: 37;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="690" role="gridcell" aria-label="Wed 11:30 AM–11:40 AM: Empty" tabindex="0" title="Wed 11:30 AM–11:40 AM: Empty" style="grid-row-start: 4; grid-column-start: 38;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="700" role="gridcell" aria-label="Wed 11:40 AM–11:45 AM: Empty" tabindex="0" title="Wed 11:40 AM–11:45 AM: Empty" style="grid-row-start: 4; grid-column-start: 39;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="705" role="gridcell" aria-label="Wed 11:45 AM–11:50 AM: Empty" tabindex="0" title="Wed 11:45 AM–11:50 AM: Empty" style="grid-row-start: 4; grid-column-start: 40;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="710" role="gridcell" aria-label="Wed 11:50 AM–12:00 PM: Empty" tabindex="0" title="Wed 11:50 AM–12:00 PM: Empty" style="grid-row-start: 4; grid-column-start: 41;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="720" role="gridcell" aria-label="Wed 12:00 PM–12:10 PM: Empty" tabindex="0" title="Wed 12:00 PM–12:10 PM: Empty" style="grid-row-start: 4; grid-column-start: 42;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="730" role="gridcell" aria-label="Wed 12:10 PM–12:15 PM: Empty" tabindex="0" title="Wed 12:10 PM–12:15 PM: Empty" style="grid-row-start: 4; grid-column-start: 43;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="735" role="gridcell" aria-label="Wed 12:15 PM–12:20 PM: Empty" tabindex="0" title="Wed 12:15 PM–12:20 PM: Empty" style="grid-row-start: 4; grid-column-start: 44;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="740" role="gridcell" aria-label="Wed 12:20 PM–12:30 PM: Empty" tabindex="0" title="Wed 12:20 PM–12:30 PM: Empty" style="grid-row-start: 4; grid-column-start: 45;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="750" role="gridcell" aria-label="Wed 12:30 PM–12:40 PM: Empty" tabindex="0" title="Wed 12:30 PM–12:40 PM: Empty" style="grid-row-start: 4; grid-column-start: 46;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="760" role="gridcell" aria-label="Wed 12:40 PM–12:45 PM: Empty" tabindex="0" title="Wed 12:40 PM–12:45 PM: Empty" style="grid-row-start: 4; grid-column-start: 47;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="765" role="gridcell" aria-label="Wed 12:45 PM–12:50 PM: Empty" tabindex="0" title="Wed 12:45 PM–12:50 PM: Empty" style="grid-row-start: 4; grid-column-start: 48;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="770" role="gridcell" aria-label="Wed 12:50 PM–1:00 PM: Empty" tabindex="0" title="Wed 12:50 PM–1:00 PM: Empty" style="grid-row-start: 4; grid-column-start: 49;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="780" role="gridcell" aria-label="Wed 1:00 PM–1:10 PM: Empty" tabindex="0" title="Wed 1:00 PM–1:10 PM: Empty" style="grid-row-start: 4; grid-column-start: 50;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="790" role="gridcell" aria-label="Wed 1:10 PM–1:15 PM: Empty" tabindex="0" title="Wed 1:10 PM–1:15 PM: Empty" style="grid-row-start: 4; grid-column-start: 51;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="795" role="gridcell" aria-label="Wed 1:15 PM–1:20 PM: Normal schedule" tabindex="0" title="Wed 1:15 PM–1:20 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 52;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="800" role="gridcell" aria-label="Wed 1:20 PM–1:30 PM: Normal schedule" tabindex="0" title="Wed 1:20 PM–1:30 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 53;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="810" role="gridcell" aria-label="Wed 1:30 PM–1:40 PM: Normal schedule" tabindex="0" title="Wed 1:30 PM–1:40 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 54;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="820" role="gridcell" aria-label="Wed 1:40 PM–1:45 PM: Normal schedule" tabindex="0" title="Wed 1:40 PM–1:45 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 55;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="825" role="gridcell" aria-label="Wed 1:45 PM–1:50 PM: Normal schedule" tabindex="0" title="Wed 1:45 PM–1:50 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 56;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="830" role="gridcell" aria-label="Wed 1:50 PM–2:00 PM: Normal schedule" tabindex="0" title="Wed 1:50 PM–2:00 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 57;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="840" role="gridcell" aria-label="Wed 2:00 PM–2:10 PM: Normal schedule" tabindex="0" title="Wed 2:00 PM–2:10 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 58;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="850" role="gridcell" aria-label="Wed 2:10 PM–2:15 PM: Normal schedule" tabindex="0" title="Wed 2:10 PM–2:15 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 59;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="855" role="gridcell" aria-label="Wed 2:15 PM–2:20 PM: Normal schedule" tabindex="0" title="Wed 2:15 PM–2:20 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 60;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="860" role="gridcell" aria-label="Wed 2:20 PM–2:30 PM: Normal schedule" tabindex="0" title="Wed 2:20 PM–2:30 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 61;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="870" role="gridcell" aria-label="Wed 2:30 PM–2:40 PM: Normal schedule" tabindex="0" title="Wed 2:30 PM–2:40 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 62;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="880" role="gridcell" aria-label="Wed 2:40 PM–2:45 PM: Normal schedule" tabindex="0" title="Wed 2:40 PM–2:45 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 63;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="885" role="gridcell" aria-label="Wed 2:45 PM–2:50 PM: Normal schedule" tabindex="0" title="Wed 2:45 PM–2:50 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 64;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="890" role="gridcell" aria-label="Wed 2:50 PM–3:00 PM: Normal schedule" tabindex="0" title="Wed 2:50 PM–3:00 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 65;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="900" role="gridcell" aria-label="Wed 3:00 PM–3:10 PM: Normal schedule" tabindex="0" title="Wed 3:00 PM–3:10 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 66;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="910" role="gridcell" aria-label="Wed 3:10 PM–3:15 PM: Normal schedule" tabindex="0" title="Wed 3:10 PM–3:15 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 67;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="915" role="gridcell" aria-label="Wed 3:15 PM–3:20 PM: Normal schedule" tabindex="0" title="Wed 3:15 PM–3:20 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 68;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="920" role="gridcell" aria-label="Wed 3:20 PM–3:30 PM: Normal schedule" tabindex="0" title="Wed 3:20 PM–3:30 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 69;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="930" role="gridcell" aria-label="Wed 3:30 PM–3:40 PM: Normal schedule" tabindex="0" title="Wed 3:30 PM–3:40 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 70;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="940" role="gridcell" aria-label="Wed 3:40 PM–3:45 PM: Normal schedule" tabindex="0" title="Wed 3:40 PM–3:45 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 71;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="945" role="gridcell" aria-label="Wed 3:45 PM–3:50 PM: Normal schedule" tabindex="0" title="Wed 3:45 PM–3:50 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 72;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="950" role="gridcell" aria-label="Wed 3:50 PM–4:00 PM: Normal schedule" tabindex="0" title="Wed 3:50 PM–4:00 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 73;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="960" role="gridcell" aria-label="Wed 4:00 PM–4:10 PM: Normal schedule" tabindex="0" title="Wed 4:00 PM–4:10 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 74;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="970" role="gridcell" aria-label="Wed 4:10 PM–4:15 PM: Normal schedule" tabindex="0" title="Wed 4:10 PM–4:15 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 75;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="975" role="gridcell" aria-label="Wed 4:15 PM–4:20 PM: Normal schedule" tabindex="0" title="Wed 4:15 PM–4:20 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 76;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="980" role="gridcell" aria-label="Wed 4:20 PM–4:30 PM: Normal schedule" tabindex="0" title="Wed 4:20 PM–4:30 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 77;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="990" role="gridcell" aria-label="Wed 4:30 PM–4:40 PM: Normal schedule" tabindex="0" title="Wed 4:30 PM–4:40 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 78;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="1000" role="gridcell" aria-label="Wed 4:40 PM–4:45 PM: Normal schedule" tabindex="0" title="Wed 4:40 PM–4:45 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 79;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="1005" role="gridcell" aria-label="Wed 4:45 PM–4:50 PM: Normal schedule" tabindex="0" title="Wed 4:45 PM–4:50 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 80;"></div><div class="schedule-cell bg-blue-slot" data-day="Wed" data-minute="1010" role="gridcell" aria-label="Wed 4:50 PM–5:00 PM: Normal schedule" tabindex="0" title="Wed 4:50 PM–5:00 PM: Normal schedule" style="grid-row-start: 4; grid-column-start: 81;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1020" role="gridcell" aria-label="Wed 5:00 PM–5:10 PM: Empty" tabindex="0" title="Wed 5:00 PM–5:10 PM: Empty" style="grid-row-start: 4; grid-column-start: 82;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1030" role="gridcell" aria-label="Wed 5:10 PM–5:15 PM: Empty" tabindex="0" title="Wed 5:10 PM–5:15 PM: Empty" style="grid-row-start: 4; grid-column-start: 83;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1035" role="gridcell" aria-label="Wed 5:15 PM–5:20 PM: Empty" tabindex="0" title="Wed 5:15 PM–5:20 PM: Empty" style="grid-row-start: 4; grid-column-start: 84;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1040" role="gridcell" aria-label="Wed 5:20 PM–5:30 PM: Empty" tabindex="0" title="Wed 5:20 PM–5:30 PM: Empty" style="grid-row-start: 4; grid-column-start: 85;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1050" role="gridcell" aria-label="Wed 5:30 PM–5:40 PM: Empty" tabindex="0" title="Wed 5:30 PM–5:40 PM: Empty" style="grid-row-start: 4; grid-column-start: 86;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1060" role="gridcell" aria-label="Wed 5:40 PM–5:45 PM: Empty" tabindex="0" title="Wed 5:40 PM–5:45 PM: Empty" style="grid-row-start: 4; grid-column-start: 87;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1065" role="gridcell" aria-label="Wed 5:45 PM–5:50 PM: Empty" tabindex="0" title="Wed 5:45 PM–5:50 PM: Empty" style="grid-row-start: 4; grid-column-start: 88;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1070" role="gridcell" aria-label="Wed 5:50 PM–6:00 PM: Empty" tabindex="0" title="Wed 5:50 PM–6:00 PM: Empty" style="grid-row-start: 4; grid-column-start: 89;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1080" role="gridcell" aria-label="Wed 6:00 PM–6:10 PM: Empty" tabindex="0" title="Wed 6:00 PM–6:10 PM: Empty" style="grid-row-start: 4; grid-column-start: 90;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1090" role="gridcell" aria-label="Wed 6:10 PM–6:15 PM: Empty" tabindex="0" title="Wed 6:10 PM–6:15 PM: Empty" style="grid-row-start: 4; grid-column-start: 91;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1095" role="gridcell" aria-label="Wed 6:15 PM–6:20 PM: Empty" tabindex="0" title="Wed 6:15 PM–6:20 PM: Empty" style="grid-row-start: 4; grid-column-start: 92;"></div><div class="schedule-cell bg-empty-slot" data-day="Wed" data-minute="1100" role="gridcell" aria-label="Wed 6:20 PM–6:30 PM: Empty" tabindex="0" title="Wed 6:20 PM–6:30 PM: Empty" style="grid-row-start: 4; grid-column-start: 93;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="1110" role="gridcell" aria-label="Wed 6:30 PM–6:40 PM: Unavailable" tabindex="-1" title="Wed 6:30 PM–6:40 PM: Unavailable" style="grid-row-start: 4; grid-column-start: 94;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="1120" role="gridcell" aria-label="Wed 6:40 PM–6:45 PM: Unavailable" tabindex="-1" title="Wed 6:40 PM–6:45 PM: Unavailable" style="grid-row-start: 4; grid-column-start: 95;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="1125" role="gridcell" aria-label="Wed 6:45 PM–6:50 PM: Unavailable" tabindex="-1" title="Wed 6:45 PM–6:50 PM: Unavailable" style="grid-row-start: 4; grid-column-start: 96;"></div><div class="schedule-cell bg-unselectable" data-day="Wed" data-minute="1130" role="gridcell" aria-label="Wed 6:50 PM–7:00 PM: Unavailable" tabindex="-1" title="Wed 6:50 PM–7:00 PM: Unavailable" style="grid-row-start: 4; grid-column-start: 97;"></div><div class="shift-label start-label" style="grid-row-start: 4; grid-column-start: 52;">1:15</div><div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours-Wed" class="schedule-cell day-total-hours" style="grid-row-start: 4; grid-column-start: 98;"><strong>3.75 hrs</strong></div><div class="day-label" style="grid-row-start: 5; grid-column-start: 1;">Thu</div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="420" role="gridcell" aria-label="Thu 7:00 AM–7:10 AM: Unavailable" tabindex="-1" title="Thu 7:00 AM–7:10 AM: Unavailable" style="grid-row-start: 5; grid-column-start: 2;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="430" role="gridcell" aria-label="Thu 7:10 AM–7:15 AM: Unavailable" tabindex="-1" title="Thu 7:10 AM–7:15 AM: Unavailable" style="grid-row-start: 5; grid-column-start: 3;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="435" role="gridcell" aria-label="Thu 7:15 AM–7:20 AM: Unavailable" tabindex="-1" title="Thu 7:15 AM–7:20 AM: Unavailable" style="grid-row-start: 5; grid-column-start: 4;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="440" role="gridcell" aria-label="Thu 7:20 AM–7:30 AM: Unavailable" tabindex="-1" title="Thu 7:20 AM–7:30 AM: Unavailable" style="grid-row-start: 5; grid-column-start: 5;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="450" role="gridcell" aria-label="Thu 7:30 AM–7:40 AM: Empty" tabindex="0" title="Thu 7:30 AM–7:40 AM: Empty" style="grid-row-start: 5; grid-column-start: 6;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="460" role="gridcell" aria-label="Thu 7:40 AM–7:45 AM: Empty" tabindex="0" title="Thu 7:40 AM–7:45 AM: Empty" style="grid-row-start: 5; grid-column-start: 7;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="465" role="gridcell" aria-label="Thu 7:45 AM–7:50 AM: Normal schedule" tabindex="0" title="Thu 7:45 AM–7:50 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 8;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="470" role="gridcell" aria-label="Thu 7:50 AM–8:00 AM: Normal schedule" tabindex="0" title="Thu 7:50 AM–8:00 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 9;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="480" role="gridcell" aria-label="Thu 8:00 AM–8:10 AM: Normal schedule" tabindex="0" title="Thu 8:00 AM–8:10 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 10;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="490" role="gridcell" aria-label="Thu 8:10 AM–8:15 AM: Normal schedule" tabindex="0" title="Thu 8:10 AM–8:15 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 11;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="495" role="gridcell" aria-label="Thu 8:15 AM–8:20 AM: Normal schedule" tabindex="0" title="Thu 8:15 AM–8:20 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 12;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="500" role="gridcell" aria-label="Thu 8:20 AM–8:30 AM: Normal schedule" tabindex="0" title="Thu 8:20 AM–8:30 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 13;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="510" role="gridcell" aria-label="Thu 8:30 AM–8:40 AM: Normal schedule" tabindex="0" title="Thu 8:30 AM–8:40 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 14;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="520" role="gridcell" aria-label="Thu 8:40 AM–8:45 AM: Normal schedule" tabindex="0" title="Thu 8:40 AM–8:45 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 15;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="525" role="gridcell" aria-label="Thu 8:45 AM–8:50 AM: Normal schedule" tabindex="0" title="Thu 8:45 AM–8:50 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 16;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="530" role="gridcell" aria-label="Thu 8:50 AM–9:00 AM: Normal schedule" tabindex="0" title="Thu 8:50 AM–9:00 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 17;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="540" role="gridcell" aria-label="Thu 9:00 AM–9:10 AM: Normal schedule" tabindex="0" title="Thu 9:00 AM–9:10 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 18;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="550" role="gridcell" aria-label="Thu 9:10 AM–9:15 AM: Normal schedule" tabindex="0" title="Thu 9:10 AM–9:15 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 19;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="555" role="gridcell" aria-label="Thu 9:15 AM–9:20 AM: Normal schedule" tabindex="0" title="Thu 9:15 AM–9:20 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 20;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="560" role="gridcell" aria-label="Thu 9:20 AM–9:30 AM: Normal schedule" tabindex="0" title="Thu 9:20 AM–9:30 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 21;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="570" role="gridcell" aria-label="Thu 9:30 AM–9:40 AM: Normal schedule" tabindex="0" title="Thu 9:30 AM–9:40 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 22;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="580" role="gridcell" aria-label="Thu 9:40 AM–9:45 AM: Normal schedule" tabindex="0" title="Thu 9:40 AM–9:45 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 23;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="585" role="gridcell" aria-label="Thu 9:45 AM–9:50 AM: Normal schedule" tabindex="0" title="Thu 9:45 AM–9:50 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 24;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="590" role="gridcell" aria-label="Thu 9:50 AM–10:00 AM: Normal schedule" tabindex="0" title="Thu 9:50 AM–10:00 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 25;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="600" role="gridcell" aria-label="Thu 10:00 AM–10:10 AM: Normal schedule" tabindex="0" title="Thu 10:00 AM–10:10 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 26;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="610" role="gridcell" aria-label="Thu 10:10 AM–10:15 AM: Normal schedule" tabindex="0" title="Thu 10:10 AM–10:15 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 27;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="615" role="gridcell" aria-label="Thu 10:15 AM–10:20 AM: Normal schedule" tabindex="0" title="Thu 10:15 AM–10:20 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 28;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="620" role="gridcell" aria-label="Thu 10:20 AM–10:30 AM: Normal schedule" tabindex="0" title="Thu 10:20 AM–10:30 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 29;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="630" role="gridcell" aria-label="Thu 10:30 AM–10:40 AM: Normal schedule" tabindex="0" title="Thu 10:30 AM–10:40 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 30;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="640" role="gridcell" aria-label="Thu 10:40 AM–10:45 AM: Normal schedule" tabindex="0" title="Thu 10:40 AM–10:45 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 31;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="645" role="gridcell" aria-label="Thu 10:45 AM–10:50 AM: Normal schedule" tabindex="0" title="Thu 10:45 AM–10:50 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 32;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="650" role="gridcell" aria-label="Thu 10:50 AM–11:00 AM: Normal schedule" tabindex="0" title="Thu 10:50 AM–11:00 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 33;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="660" role="gridcell" aria-label="Thu 11:00 AM–11:10 AM: Normal schedule" tabindex="0" title="Thu 11:00 AM–11:10 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 34;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="670" role="gridcell" aria-label="Thu 11:10 AM–11:15 AM: Normal schedule" tabindex="0" title="Thu 11:10 AM–11:15 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 35;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="675" role="gridcell" aria-label="Thu 11:15 AM–11:20 AM: Normal schedule" tabindex="0" title="Thu 11:15 AM–11:20 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 36;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="680" role="gridcell" aria-label="Thu 11:20 AM–11:30 AM: Normal schedule" tabindex="0" title="Thu 11:20 AM–11:30 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 37;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="690" role="gridcell" aria-label="Thu 11:30 AM–11:40 AM: Normal schedule" tabindex="0" title="Thu 11:30 AM–11:40 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 38;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="700" role="gridcell" aria-label="Thu 11:40 AM–11:45 AM: Normal schedule" tabindex="0" title="Thu 11:40 AM–11:45 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 39;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="705" role="gridcell" aria-label="Thu 11:45 AM–11:50 AM: Normal schedule" tabindex="0" title="Thu 11:45 AM–11:50 AM: Normal schedule" style="grid-row-start: 5; grid-column-start: 40;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="710" role="gridcell" aria-label="Thu 11:50 AM–12:00 PM: Normal schedule" tabindex="0" title="Thu 11:50 AM–12:00 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 41;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="720" role="gridcell" aria-label="Thu 12:00 PM–12:10 PM: Normal schedule" tabindex="0" title="Thu 12:00 PM–12:10 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 42;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="730" role="gridcell" aria-label="Thu 12:10 PM–12:15 PM: Normal schedule" tabindex="0" title="Thu 12:10 PM–12:15 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 43;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="735" role="gridcell" aria-label="Thu 12:15 PM–12:20 PM: Normal schedule" tabindex="0" title="Thu 12:15 PM–12:20 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 44;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="740" role="gridcell" aria-label="Thu 12:20 PM–12:30 PM: Normal schedule" tabindex="0" title="Thu 12:20 PM–12:30 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 45;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="750" role="gridcell" aria-label="Thu 12:30 PM–12:40 PM: Normal schedule" tabindex="0" title="Thu 12:30 PM–12:40 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 46;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="760" role="gridcell" aria-label="Thu 12:40 PM–12:45 PM: Normal schedule" tabindex="0" title="Thu 12:40 PM–12:45 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 47;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="765" role="gridcell" aria-label="Thu 12:45 PM–12:50 PM: Normal schedule" tabindex="0" title="Thu 12:45 PM–12:50 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 48;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="770" role="gridcell" aria-label="Thu 12:50 PM–1:00 PM: Normal schedule" tabindex="0" title="Thu 12:50 PM–1:00 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 49;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="780" role="gridcell" aria-label="Thu 1:00 PM–1:10 PM: Normal schedule" tabindex="0" title="Thu 1:00 PM–1:10 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 50;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="790" role="gridcell" aria-label="Thu 1:10 PM–1:15 PM: Normal schedule" tabindex="0" title="Thu 1:10 PM–1:15 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 51;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="795" role="gridcell" aria-label="Thu 1:15 PM–1:20 PM: Normal schedule" tabindex="0" title="Thu 1:15 PM–1:20 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 52;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="800" role="gridcell" aria-label="Thu 1:20 PM–1:30 PM: Normal schedule" tabindex="0" title="Thu 1:20 PM–1:30 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 53;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="810" role="gridcell" aria-label="Thu 1:30 PM–1:40 PM: Normal schedule" tabindex="0" title="Thu 1:30 PM–1:40 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 54;"></div><div class="schedule-cell bg-blue-slot" data-day="Thu" data-minute="820" role="gridcell" aria-label="Thu 1:40 PM–1:45 PM: Normal schedule" tabindex="0" title="Thu 1:40 PM–1:45 PM: Normal schedule" style="grid-row-start: 5; grid-column-start: 55;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="825" role="gridcell" aria-label="Thu 1:45 PM–1:50 PM: Empty" tabindex="0" title="Thu 1:45 PM–1:50 PM: Empty" style="grid-row-start: 5; grid-column-start: 56;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="830" role="gridcell" aria-label="Thu 1:50 PM–2:00 PM: Empty" tabindex="0" title="Thu 1:50 PM–2:00 PM: Empty" style="grid-row-start: 5; grid-column-start: 57;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="840" role="gridcell" aria-label="Thu 2:00 PM–2:10 PM: Empty" tabindex="0" title="Thu 2:00 PM–2:10 PM: Empty" style="grid-row-start: 5; grid-column-start: 58;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="850" role="gridcell" aria-label="Thu 2:10 PM–2:15 PM: Empty" tabindex="0" title="Thu 2:10 PM–2:15 PM: Empty" style="grid-row-start: 5; grid-column-start: 59;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="855" role="gridcell" aria-label="Thu 2:15 PM–2:20 PM: Empty" tabindex="0" title="Thu 2:15 PM–2:20 PM: Empty" style="grid-row-start: 5; grid-column-start: 60;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="860" role="gridcell" aria-label="Thu 2:20 PM–2:30 PM: Empty" tabindex="0" title="Thu 2:20 PM–2:30 PM: Empty" style="grid-row-start: 5; grid-column-start: 61;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="870" role="gridcell" aria-label="Thu 2:30 PM–2:40 PM: Empty" tabindex="0" title="Thu 2:30 PM–2:40 PM: Empty" style="grid-row-start: 5; grid-column-start: 62;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="880" role="gridcell" aria-label="Thu 2:40 PM–2:45 PM: Empty" tabindex="0" title="Thu 2:40 PM–2:45 PM: Empty" style="grid-row-start: 5; grid-column-start: 63;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="885" role="gridcell" aria-label="Thu 2:45 PM–2:50 PM: Empty" tabindex="0" title="Thu 2:45 PM–2:50 PM: Empty" style="grid-row-start: 5; grid-column-start: 64;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="890" role="gridcell" aria-label="Thu 2:50 PM–3:00 PM: Empty" tabindex="0" title="Thu 2:50 PM–3:00 PM: Empty" style="grid-row-start: 5; grid-column-start: 65;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="900" role="gridcell" aria-label="Thu 3:00 PM–3:10 PM: Empty" tabindex="0" title="Thu 3:00 PM–3:10 PM: Empty" style="grid-row-start: 5; grid-column-start: 66;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="910" role="gridcell" aria-label="Thu 3:10 PM–3:15 PM: Empty" tabindex="0" title="Thu 3:10 PM–3:15 PM: Empty" style="grid-row-start: 5; grid-column-start: 67;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="915" role="gridcell" aria-label="Thu 3:15 PM–3:20 PM: Empty" tabindex="0" title="Thu 3:15 PM–3:20 PM: Empty" style="grid-row-start: 5; grid-column-start: 68;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="920" role="gridcell" aria-label="Thu 3:20 PM–3:30 PM: Empty" tabindex="0" title="Thu 3:20 PM–3:30 PM: Empty" style="grid-row-start: 5; grid-column-start: 69;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="930" role="gridcell" aria-label="Thu 3:30 PM–3:40 PM: Empty" tabindex="0" title="Thu 3:30 PM–3:40 PM: Empty" style="grid-row-start: 5; grid-column-start: 70;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="940" role="gridcell" aria-label="Thu 3:40 PM–3:45 PM: Empty" tabindex="0" title="Thu 3:40 PM–3:45 PM: Empty" style="grid-row-start: 5; grid-column-start: 71;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="945" role="gridcell" aria-label="Thu 3:45 PM–3:50 PM: Empty" tabindex="0" title="Thu 3:45 PM–3:50 PM: Empty" style="grid-row-start: 5; grid-column-start: 72;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="950" role="gridcell" aria-label="Thu 3:50 PM–4:00 PM: Empty" tabindex="0" title="Thu 3:50 PM–4:00 PM: Empty" style="grid-row-start: 5; grid-column-start: 73;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="960" role="gridcell" aria-label="Thu 4:00 PM–4:10 PM: Empty" tabindex="0" title="Thu 4:00 PM–4:10 PM: Empty" style="grid-row-start: 5; grid-column-start: 74;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="970" role="gridcell" aria-label="Thu 4:10 PM–4:15 PM: Empty" tabindex="0" title="Thu 4:10 PM–4:15 PM: Empty" style="grid-row-start: 5; grid-column-start: 75;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="975" role="gridcell" aria-label="Thu 4:15 PM–4:20 PM: Empty" tabindex="0" title="Thu 4:15 PM–4:20 PM: Empty" style="grid-row-start: 5; grid-column-start: 76;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="980" role="gridcell" aria-label="Thu 4:20 PM–4:30 PM: Empty" tabindex="0" title="Thu 4:20 PM–4:30 PM: Empty" style="grid-row-start: 5; grid-column-start: 77;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="990" role="gridcell" aria-label="Thu 4:30 PM–4:40 PM: Empty" tabindex="0" title="Thu 4:30 PM–4:40 PM: Empty" style="grid-row-start: 5; grid-column-start: 78;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1000" role="gridcell" aria-label="Thu 4:40 PM–4:45 PM: Empty" tabindex="0" title="Thu 4:40 PM–4:45 PM: Empty" style="grid-row-start: 5; grid-column-start: 79;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1005" role="gridcell" aria-label="Thu 4:45 PM–4:50 PM: Empty" tabindex="0" title="Thu 4:45 PM–4:50 PM: Empty" style="grid-row-start: 5; grid-column-start: 80;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1010" role="gridcell" aria-label="Thu 4:50 PM–5:00 PM: Empty" tabindex="0" title="Thu 4:50 PM–5:00 PM: Empty" style="grid-row-start: 5; grid-column-start: 81;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1020" role="gridcell" aria-label="Thu 5:00 PM–5:10 PM: Empty" tabindex="0" title="Thu 5:00 PM–5:10 PM: Empty" style="grid-row-start: 5; grid-column-start: 82;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1030" role="gridcell" aria-label="Thu 5:10 PM–5:15 PM: Empty" tabindex="0" title="Thu 5:10 PM–5:15 PM: Empty" style="grid-row-start: 5; grid-column-start: 83;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1035" role="gridcell" aria-label="Thu 5:15 PM–5:20 PM: Empty" tabindex="0" title="Thu 5:15 PM–5:20 PM: Empty" style="grid-row-start: 5; grid-column-start: 84;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1040" role="gridcell" aria-label="Thu 5:20 PM–5:30 PM: Empty" tabindex="0" title="Thu 5:20 PM–5:30 PM: Empty" style="grid-row-start: 5; grid-column-start: 85;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1050" role="gridcell" aria-label="Thu 5:30 PM–5:40 PM: Empty" tabindex="0" title="Thu 5:30 PM–5:40 PM: Empty" style="grid-row-start: 5; grid-column-start: 86;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1060" role="gridcell" aria-label="Thu 5:40 PM–5:45 PM: Empty" tabindex="0" title="Thu 5:40 PM–5:45 PM: Empty" style="grid-row-start: 5; grid-column-start: 87;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1065" role="gridcell" aria-label="Thu 5:45 PM–5:50 PM: Empty" tabindex="0" title="Thu 5:45 PM–5:50 PM: Empty" style="grid-row-start: 5; grid-column-start: 88;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1070" role="gridcell" aria-label="Thu 5:50 PM–6:00 PM: Empty" tabindex="0" title="Thu 5:50 PM–6:00 PM: Empty" style="grid-row-start: 5; grid-column-start: 89;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1080" role="gridcell" aria-label="Thu 6:00 PM–6:10 PM: Empty" tabindex="0" title="Thu 6:00 PM–6:10 PM: Empty" style="grid-row-start: 5; grid-column-start: 90;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1090" role="gridcell" aria-label="Thu 6:10 PM–6:15 PM: Empty" tabindex="0" title="Thu 6:10 PM–6:15 PM: Empty" style="grid-row-start: 5; grid-column-start: 91;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1095" role="gridcell" aria-label="Thu 6:15 PM–6:20 PM: Empty" tabindex="0" title="Thu 6:15 PM–6:20 PM: Empty" style="grid-row-start: 5; grid-column-start: 92;"></div><div class="schedule-cell bg-empty-slot" data-day="Thu" data-minute="1100" role="gridcell" aria-label="Thu 6:20 PM–6:30 PM: Empty" tabindex="0" title="Thu 6:20 PM–6:30 PM: Empty" style="grid-row-start: 5; grid-column-start: 93;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="1110" role="gridcell" aria-label="Thu 6:30 PM–6:40 PM: Unavailable" tabindex="-1" title="Thu 6:30 PM–6:40 PM: Unavailable" style="grid-row-start: 5; grid-column-start: 94;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="1120" role="gridcell" aria-label="Thu 6:40 PM–6:45 PM: Unavailable" tabindex="-1" title="Thu 6:40 PM–6:45 PM: Unavailable" style="grid-row-start: 5; grid-column-start: 95;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="1125" role="gridcell" aria-label="Thu 6:45 PM–6:50 PM: Unavailable" tabindex="-1" title="Thu 6:45 PM–6:50 PM: Unavailable" style="grid-row-start: 5; grid-column-start: 96;"></div><div class="schedule-cell bg-unselectable" data-day="Thu" data-minute="1130" role="gridcell" aria-label="Thu 6:50 PM–7:00 PM: Unavailable" tabindex="-1" title="Thu 6:50 PM–7:00 PM: Unavailable" style="grid-row-start: 5; grid-column-start: 97;"></div><div class="shift-label start-label" style="grid-row-start: 5; grid-column-start: 8;">7:45</div><div class="shift-label end-label" style="grid-row-start: 5; grid-column-start: 56;">1:45</div><div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours-Thu" class="schedule-cell day-total-hours" style="grid-row-start: 5; grid-column-start: 98;"><strong>6.00 hrs</strong></div><div class="day-label" style="grid-row-start: 6; grid-column-start: 1;">Fri</div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="420" role="gridcell" aria-label="Fri 7:00 AM–7:10 AM: Unavailable" tabindex="-1" title="Fri 7:00 AM–7:10 AM: Unavailable" style="grid-row-start: 6; grid-column-start: 2;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="430" role="gridcell" aria-label="Fri 7:10 AM–7:15 AM: Unavailable" tabindex="-1" title="Fri 7:10 AM–7:15 AM: Unavailable" style="grid-row-start: 6; grid-column-start: 3;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="435" role="gridcell" aria-label="Fri 7:15 AM–7:20 AM: Unavailable" tabindex="-1" title="Fri 7:15 AM–7:20 AM: Unavailable" style="grid-row-start: 6; grid-column-start: 4;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="440" role="gridcell" aria-label="Fri 7:20 AM–7:30 AM: Unavailable" tabindex="-1" title="Fri 7:20 AM–7:30 AM: Unavailable" style="grid-row-start: 6; grid-column-start: 5;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="450" role="gridcell" aria-label="Fri 7:30 AM–7:40 AM: Empty" tabindex="0" title="Fri 7:30 AM–7:40 AM: Empty" style="grid-row-start: 6; grid-column-start: 6;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="460" role="gridcell" aria-label="Fri 7:40 AM–7:45 AM: Empty" tabindex="0" title="Fri 7:40 AM–7:45 AM: Empty" style="grid-row-start: 6; grid-column-start: 7;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="465" role="gridcell" aria-label="Fri 7:45 AM–7:50 AM: Empty" tabindex="0" title="Fri 7:45 AM–7:50 AM: Empty" style="grid-row-start: 6; grid-column-start: 8;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="470" role="gridcell" aria-label="Fri 7:50 AM–8:00 AM: Empty" tabindex="0" title="Fri 7:50 AM–8:00 AM: Empty" style="grid-row-start: 6; grid-column-start: 9;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="480" role="gridcell" aria-label="Fri 8:00 AM–8:10 AM: Empty" tabindex="0" title="Fri 8:00 AM–8:10 AM: Empty" style="grid-row-start: 6; grid-column-start: 10;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="490" role="gridcell" aria-label="Fri 8:10 AM–8:15 AM: Empty" tabindex="0" title="Fri 8:10 AM–8:15 AM: Empty" style="grid-row-start: 6; grid-column-start: 11;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="495" role="gridcell" aria-label="Fri 8:15 AM–8:20 AM: Empty" tabindex="0" title="Fri 8:15 AM–8:20 AM: Empty" style="grid-row-start: 6; grid-column-start: 12;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="500" role="gridcell" aria-label="Fri 8:20 AM–8:30 AM: Empty" tabindex="0" title="Fri 8:20 AM–8:30 AM: Empty" style="grid-row-start: 6; grid-column-start: 13;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="510" role="gridcell" aria-label="Fri 8:30 AM–8:40 AM: Empty" tabindex="0" title="Fri 8:30 AM–8:40 AM: Empty" style="grid-row-start: 6; grid-column-start: 14;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="520" role="gridcell" aria-label="Fri 8:40 AM–8:45 AM: Empty" tabindex="0" title="Fri 8:40 AM–8:45 AM: Empty" style="grid-row-start: 6; grid-column-start: 15;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="525" role="gridcell" aria-label="Fri 8:45 AM–8:50 AM: Empty" tabindex="0" title="Fri 8:45 AM–8:50 AM: Empty" style="grid-row-start: 6; grid-column-start: 16;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="530" role="gridcell" aria-label="Fri 8:50 AM–9:00 AM: Empty" tabindex="0" title="Fri 8:50 AM–9:00 AM: Empty" style="grid-row-start: 6; grid-column-start: 17;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="540" role="gridcell" aria-label="Fri 9:00 AM–9:10 AM: Empty" tabindex="0" title="Fri 9:00 AM–9:10 AM: Empty" style="grid-row-start: 6; grid-column-start: 18;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="550" role="gridcell" aria-label="Fri 9:10 AM–9:15 AM: Empty" tabindex="0" title="Fri 9:10 AM–9:15 AM: Empty" style="grid-row-start: 6; grid-column-start: 19;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="555" role="gridcell" aria-label="Fri 9:15 AM–9:20 AM: Empty" tabindex="0" title="Fri 9:15 AM–9:20 AM: Empty" style="grid-row-start: 6; grid-column-start: 20;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="560" role="gridcell" aria-label="Fri 9:20 AM–9:30 AM: Empty" tabindex="0" title="Fri 9:20 AM–9:30 AM: Empty" style="grid-row-start: 6; grid-column-start: 21;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="570" role="gridcell" aria-label="Fri 9:30 AM–9:40 AM: Empty" tabindex="0" title="Fri 9:30 AM–9:40 AM: Empty" style="grid-row-start: 6; grid-column-start: 22;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="580" role="gridcell" aria-label="Fri 9:40 AM–9:45 AM: Empty" tabindex="0" title="Fri 9:40 AM–9:45 AM: Empty" style="grid-row-start: 6; grid-column-start: 23;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="585" role="gridcell" aria-label="Fri 9:45 AM–9:50 AM: Empty" tabindex="0" title="Fri 9:45 AM–9:50 AM: Empty" style="grid-row-start: 6; grid-column-start: 24;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="590" role="gridcell" aria-label="Fri 9:50 AM–10:00 AM: Empty" tabindex="0" title="Fri 9:50 AM–10:00 AM: Empty" style="grid-row-start: 6; grid-column-start: 25;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="600" role="gridcell" aria-label="Fri 10:00 AM–10:10 AM: Empty" tabindex="0" title="Fri 10:00 AM–10:10 AM: Empty" style="grid-row-start: 6; grid-column-start: 26;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="610" role="gridcell" aria-label="Fri 10:10 AM–10:15 AM: Empty" tabindex="0" title="Fri 10:10 AM–10:15 AM: Empty" style="grid-row-start: 6; grid-column-start: 27;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="615" role="gridcell" aria-label="Fri 10:15 AM–10:20 AM: Empty" tabindex="0" title="Fri 10:15 AM–10:20 AM: Empty" style="grid-row-start: 6; grid-column-start: 28;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="620" role="gridcell" aria-label="Fri 10:20 AM–10:30 AM: Empty" tabindex="0" title="Fri 10:20 AM–10:30 AM: Empty" style="grid-row-start: 6; grid-column-start: 29;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="630" role="gridcell" aria-label="Fri 10:30 AM–10:40 AM: Empty" tabindex="0" title="Fri 10:30 AM–10:40 AM: Empty" style="grid-row-start: 6; grid-column-start: 30;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="640" role="gridcell" aria-label="Fri 10:40 AM–10:45 AM: Empty" tabindex="0" title="Fri 10:40 AM–10:45 AM: Empty" style="grid-row-start: 6; grid-column-start: 31;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="645" role="gridcell" aria-label="Fri 10:45 AM–10:50 AM: Empty" tabindex="0" title="Fri 10:45 AM–10:50 AM: Empty" style="grid-row-start: 6; grid-column-start: 32;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="650" role="gridcell" aria-label="Fri 10:50 AM–11:00 AM: Empty" tabindex="0" title="Fri 10:50 AM–11:00 AM: Empty" style="grid-row-start: 6; grid-column-start: 33;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="660" role="gridcell" aria-label="Fri 11:00 AM–11:10 AM: Empty" tabindex="0" title="Fri 11:00 AM–11:10 AM: Empty" style="grid-row-start: 6; grid-column-start: 34;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="670" role="gridcell" aria-label="Fri 11:10 AM–11:15 AM: Empty" tabindex="0" title="Fri 11:10 AM–11:15 AM: Empty" style="grid-row-start: 6; grid-column-start: 35;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="675" role="gridcell" aria-label="Fri 11:15 AM–11:20 AM: Empty" tabindex="0" title="Fri 11:15 AM–11:20 AM: Empty" style="grid-row-start: 6; grid-column-start: 36;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="680" role="gridcell" aria-label="Fri 11:20 AM–11:30 AM: Empty" tabindex="0" title="Fri 11:20 AM–11:30 AM: Empty" style="grid-row-start: 6; grid-column-start: 37;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="690" role="gridcell" aria-label="Fri 11:30 AM–11:40 AM: Empty" tabindex="0" title="Fri 11:30 AM–11:40 AM: Empty" style="grid-row-start: 6; grid-column-start: 38;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="700" role="gridcell" aria-label="Fri 11:40 AM–11:45 AM: Empty" tabindex="0" title="Fri 11:40 AM–11:45 AM: Empty" style="grid-row-start: 6; grid-column-start: 39;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="705" role="gridcell" aria-label="Fri 11:45 AM–11:50 AM: Empty" tabindex="0" title="Fri 11:45 AM–11:50 AM: Empty" style="grid-row-start: 6; grid-column-start: 40;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="710" role="gridcell" aria-label="Fri 11:50 AM–12:00 PM: Empty" tabindex="0" title="Fri 11:50 AM–12:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 41;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="720" role="gridcell" aria-label="Fri 12:00 PM–12:10 PM: Empty" tabindex="0" title="Fri 12:00 PM–12:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 42;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="730" role="gridcell" aria-label="Fri 12:10 PM–12:15 PM: Empty" tabindex="0" title="Fri 12:10 PM–12:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 43;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="735" role="gridcell" aria-label="Fri 12:15 PM–12:20 PM: Empty" tabindex="0" title="Fri 12:15 PM–12:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 44;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="740" role="gridcell" aria-label="Fri 12:20 PM–12:30 PM: Empty" tabindex="0" title="Fri 12:20 PM–12:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 45;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="750" role="gridcell" aria-label="Fri 12:30 PM–12:40 PM: Empty" tabindex="0" title="Fri 12:30 PM–12:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 46;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="760" role="gridcell" aria-label="Fri 12:40 PM–12:45 PM: Empty" tabindex="0" title="Fri 12:40 PM–12:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 47;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="765" role="gridcell" aria-label="Fri 12:45 PM–12:50 PM: Empty" tabindex="0" title="Fri 12:45 PM–12:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 48;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="770" role="gridcell" aria-label="Fri 12:50 PM–1:00 PM: Empty" tabindex="0" title="Fri 12:50 PM–1:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 49;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="780" role="gridcell" aria-label="Fri 1:00 PM–1:10 PM: Empty" tabindex="0" title="Fri 1:00 PM–1:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 50;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="790" role="gridcell" aria-label="Fri 1:10 PM–1:15 PM: Empty" tabindex="0" title="Fri 1:10 PM–1:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 51;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="795" role="gridcell" aria-label="Fri 1:15 PM–1:20 PM: Empty" tabindex="0" title="Fri 1:15 PM–1:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 52;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="800" role="gridcell" aria-label="Fri 1:20 PM–1:30 PM: Empty" tabindex="0" title="Fri 1:20 PM–1:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 53;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="810" role="gridcell" aria-label="Fri 1:30 PM–1:40 PM: Empty" tabindex="0" title="Fri 1:30 PM–1:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 54;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="820" role="gridcell" aria-label="Fri 1:40 PM–1:45 PM: Empty" tabindex="0" title="Fri 1:40 PM–1:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 55;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="825" role="gridcell" aria-label="Fri 1:45 PM–1:50 PM: Empty" tabindex="0" title="Fri 1:45 PM–1:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 56;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="830" role="gridcell" aria-label="Fri 1:50 PM–2:00 PM: Empty" tabindex="0" title="Fri 1:50 PM–2:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 57;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="840" role="gridcell" aria-label="Fri 2:00 PM–2:10 PM: Empty" tabindex="0" title="Fri 2:00 PM–2:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 58;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="850" role="gridcell" aria-label="Fri 2:10 PM–2:15 PM: Empty" tabindex="0" title="Fri 2:10 PM–2:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 59;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="855" role="gridcell" aria-label="Fri 2:15 PM–2:20 PM: Empty" tabindex="0" title="Fri 2:15 PM–2:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 60;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="860" role="gridcell" aria-label="Fri 2:20 PM–2:30 PM: Empty" tabindex="0" title="Fri 2:20 PM–2:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 61;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="870" role="gridcell" aria-label="Fri 2:30 PM–2:40 PM: Empty" tabindex="0" title="Fri 2:30 PM–2:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 62;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="880" role="gridcell" aria-label="Fri 2:40 PM–2:45 PM: Empty" tabindex="0" title="Fri 2:40 PM–2:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 63;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="885" role="gridcell" aria-label="Fri 2:45 PM–2:50 PM: Empty" tabindex="0" title="Fri 2:45 PM–2:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 64;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="890" role="gridcell" aria-label="Fri 2:50 PM–3:00 PM: Empty" tabindex="0" title="Fri 2:50 PM–3:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 65;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="900" role="gridcell" aria-label="Fri 3:00 PM–3:10 PM: Empty" tabindex="0" title="Fri 3:00 PM–3:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 66;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="910" role="gridcell" aria-label="Fri 3:10 PM–3:15 PM: Empty" tabindex="0" title="Fri 3:10 PM–3:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 67;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="915" role="gridcell" aria-label="Fri 3:15 PM–3:20 PM: Empty" tabindex="0" title="Fri 3:15 PM–3:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 68;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="920" role="gridcell" aria-label="Fri 3:20 PM–3:30 PM: Empty" tabindex="0" title="Fri 3:20 PM–3:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 69;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="930" role="gridcell" aria-label="Fri 3:30 PM–3:40 PM: Empty" tabindex="0" title="Fri 3:30 PM–3:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 70;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="940" role="gridcell" aria-label="Fri 3:40 PM–3:45 PM: Empty" tabindex="0" title="Fri 3:40 PM–3:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 71;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="945" role="gridcell" aria-label="Fri 3:45 PM–3:50 PM: Empty" tabindex="0" title="Fri 3:45 PM–3:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 72;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="950" role="gridcell" aria-label="Fri 3:50 PM–4:00 PM: Empty" tabindex="0" title="Fri 3:50 PM–4:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 73;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="960" role="gridcell" aria-label="Fri 4:00 PM–4:10 PM: Empty" tabindex="0" title="Fri 4:00 PM–4:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 74;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="970" role="gridcell" aria-label="Fri 4:10 PM–4:15 PM: Empty" tabindex="0" title="Fri 4:10 PM–4:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 75;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="975" role="gridcell" aria-label="Fri 4:15 PM–4:20 PM: Empty" tabindex="0" title="Fri 4:15 PM–4:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 76;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="980" role="gridcell" aria-label="Fri 4:20 PM–4:30 PM: Empty" tabindex="0" title="Fri 4:20 PM–4:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 77;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="990" role="gridcell" aria-label="Fri 4:30 PM–4:40 PM: Empty" tabindex="0" title="Fri 4:30 PM–4:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 78;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1000" role="gridcell" aria-label="Fri 4:40 PM–4:45 PM: Empty" tabindex="0" title="Fri 4:40 PM–4:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 79;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1005" role="gridcell" aria-label="Fri 4:45 PM–4:50 PM: Empty" tabindex="0" title="Fri 4:45 PM–4:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 80;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1010" role="gridcell" aria-label="Fri 4:50 PM–5:00 PM: Empty" tabindex="0" title="Fri 4:50 PM–5:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 81;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1020" role="gridcell" aria-label="Fri 5:00 PM–5:10 PM: Empty" tabindex="0" title="Fri 5:00 PM–5:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 82;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1030" role="gridcell" aria-label="Fri 5:10 PM–5:15 PM: Empty" tabindex="0" title="Fri 5:10 PM–5:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 83;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1035" role="gridcell" aria-label="Fri 5:15 PM–5:20 PM: Empty" tabindex="0" title="Fri 5:15 PM–5:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 84;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1040" role="gridcell" aria-label="Fri 5:20 PM–5:30 PM: Empty" tabindex="0" title="Fri 5:20 PM–5:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 85;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1050" role="gridcell" aria-label="Fri 5:30 PM–5:40 PM: Empty" tabindex="0" title="Fri 5:30 PM–5:40 PM: Empty" style="grid-row-start: 6; grid-column-start: 86;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1060" role="gridcell" aria-label="Fri 5:40 PM–5:45 PM: Empty" tabindex="0" title="Fri 5:40 PM–5:45 PM: Empty" style="grid-row-start: 6; grid-column-start: 87;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1065" role="gridcell" aria-label="Fri 5:45 PM–5:50 PM: Empty" tabindex="0" title="Fri 5:45 PM–5:50 PM: Empty" style="grid-row-start: 6; grid-column-start: 88;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1070" role="gridcell" aria-label="Fri 5:50 PM–6:00 PM: Empty" tabindex="0" title="Fri 5:50 PM–6:00 PM: Empty" style="grid-row-start: 6; grid-column-start: 89;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1080" role="gridcell" aria-label="Fri 6:00 PM–6:10 PM: Empty" tabindex="0" title="Fri 6:00 PM–6:10 PM: Empty" style="grid-row-start: 6; grid-column-start: 90;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1090" role="gridcell" aria-label="Fri 6:10 PM–6:15 PM: Empty" tabindex="0" title="Fri 6:10 PM–6:15 PM: Empty" style="grid-row-start: 6; grid-column-start: 91;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1095" role="gridcell" aria-label="Fri 6:15 PM–6:20 PM: Empty" tabindex="0" title="Fri 6:15 PM–6:20 PM: Empty" style="grid-row-start: 6; grid-column-start: 92;"></div><div class="schedule-cell bg-empty-slot" data-day="Fri" data-minute="1100" role="gridcell" aria-label="Fri 6:20 PM–6:30 PM: Empty" tabindex="0" title="Fri 6:20 PM–6:30 PM: Empty" style="grid-row-start: 6; grid-column-start: 93;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="1110" role="gridcell" aria-label="Fri 6:30 PM–6:40 PM: Unavailable" tabindex="-1" title="Fri 6:30 PM–6:40 PM: Unavailable" style="grid-row-start: 6; grid-column-start: 94;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="1120" role="gridcell" aria-label="Fri 6:40 PM–6:45 PM: Unavailable" tabindex="-1" title="Fri 6:40 PM–6:45 PM: Unavailable" style="grid-row-start: 6; grid-column-start: 95;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="1125" role="gridcell" aria-label="Fri 6:45 PM–6:50 PM: Unavailable" tabindex="-1" title="Fri 6:45 PM–6:50 PM: Unavailable" style="grid-row-start: 6; grid-column-start: 96;"></div><div class="schedule-cell bg-unselectable" data-day="Fri" data-minute="1130" role="gridcell" aria-label="Fri 6:50 PM–7:00 PM: Unavailable" tabindex="-1" title="Fri 6:50 PM–7:00 PM: Unavailable" style="grid-row-start: 6; grid-column-start: 97;"></div><div id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-total-hours-Fri" class="schedule-cell day-total-hours" style="grid-row-start: 6; grid-column-start: 98;">Off</div></div>
+
+
+<style>
+    .schedule-grid {
+        display: grid;
+        gap: 1px;
+        background: transparent;
+        position: relative;
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+    .schedule-cell {
+        height: 2rem;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        transition: background-color 0.05s linear, color 0.05s linear, font-weight 0.05s linear;
+        position: relative;
+    }
+    .bg-empty-slot { background: #fbfdff; }
+    .bg-unselectable { background: #666666; }
+    .schedule-grid.is-editable .schedule-cell.schedule-slot.bg-empty-slot:hover {
+        background-color: #3b82f6 !important;
+        color: white !important;
+        font-weight: 600 !important;
+        cursor: pointer;
+    }
+    .shift-label {
+        position: absolute;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1px 4px;
+        border-radius: 4px;
+        z-index: 35;
+        pointer-events: none;
+        line-height: 1;
+        transform: translateY(-50%);
+    }
+    .start-label {
+        left: 2px;
+        top: 1.5rem;
+    }
+    .end-label {
+        left: 2px;
+        top: 0.5rem;
+    }
+    .schedule-hour-header {
+        font-weight: 700;
+        text-align: center;
+        padding: 0.375rem 0;
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom: none;
+    }
+    .day-label {
+        text-align: right;
+        padding-right: 0.5rem;
+        font-weight: 600;
+        color: #4b5563;
+        background: white;
+        position: sticky;
+        left: 0;
+        z-index: 30;
+        border-right: 1px solid #e5e7eb;
+    }
+    .day-total-hours {
+        background: white;
+        border-left: 1px solid #e5e7eb;
+        user-select: none;
+        text-align: left;
+        padding-right: 0.5rem;
+        padding-left: 0.01rem;
+        width: 7rem;
+        font-weight: 600;
+        color: #374151;
+        position: sticky;
+        justify: left;
+        right: 0;
+        z-index: 30;
+    }
+    .schedule-grid:not(.is-editable) {
+        gap: 0;
+    }
+    .hour-divider {
+        grid-row: 2 / -1;
+        border-left: 1px solid #e5e7eb;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .legend-swatch{
+        width: 1.25rem;
+        height: 1rem;
+        border-radius: 0.25rem;
+        display: inline-block;
+        border: 1px solid rgba(0,0,0,0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+     
+    .bg-blue-slot,
+    .bg-green-slot,
+    .bg-red-slot {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bg-blue-slot { 
+        border-top: 2px solid rgba(255,255,255,0.35); 
+        border-bottom: 2px solid rgba(255,255,255,0.35);
+    }
+    .bg-green-slot {
+        border-top: 2px solid rgba(20,83,45,0.9);
+        border-bottom: 2px solid rgba(20,83,45,0.9);
+    }     
+    .bg-red-slot { 
+        border-top: 2px solid rgba(127,29,29,0.95);
+        border-bottom: 2px solid rgba(127,29,29,0.95);
+    }    
+
+     
+    .bg-blue-slot,
+    .bg-green-slot,
+    .bg-red-slot,
+    .bg-unselectable {
+    position: relative;
+    overflow: hidden;
+    }
+
+     
+    .bg-blue-slot  { background: #2563eb; color: #fff; }
+    .bg-green-slot { background: #16a34a; color: #fff; }
+    .bg-red-slot   { background: rgb(255, 97, 97); color: #7f1d1d; }
+
+     
+    .bg-green-slot::after,
+    .bg-red-slot::after,
+    .bg-blue-slot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    }
+
+     
+    .bg-green-slot::after {
+    opacity: 0.35;  
+    background-image: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.65) 0,
+        rgba(0,0,0,0.65) 3px,
+        rgba(0,0,0,0.0) 3px,
+        rgba(0,0,0,0.0) 8px
+    );
+    }
+
+     
+    .bg-red-slot::after{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+
+         
+        opacity: 0.55;                  
+        background-repeat: no-repeat;
+
+         
+        background-image:
+            linear-gradient(rgba(127,29,29,0.95), rgba(127,29,29,0.95)),
+            linear-gradient(rgba(127,29,29,0.95), rgba(127,29,29,0.95)),
+            linear-gradient(rgba(127,29,29,0.95), rgba(127,29,29,0.95));
+
+         
+        background-size: 2px 100%, 2px 100%, 2px 100%;
+
+         
+        background-position: 25% 0, 50% 0, 75% 0;
+    }
+
+
+     
+    .bg-blue-slot::after {
+    opacity: 0.18;  
+    background-image: radial-gradient(rgba(255,255,255,0.85) 1px, transparent 1px);
+    background-size: 10px 10px;
+    }
+
+
+     
+    .schedule-cell:focus-visible{
+        outline: 3px solid rgba(59,130,246,0.9);
+        outline-offset: -3px;
+    }
+
+     
+    .schedule-tooltip{
+        position: fixed;
+        z-index: 9999;
+        max-width: 260px;
+        background: rgba(17,24,39,0.95);
+        color: white;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        line-height: 1.2;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity 80ms linear, transform 80ms linear;
+    }
+    .schedule-tooltip.is-visible{
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+</style>
+
+<script>
+(function (
+    scheduleName,
+    baseScheduleJson,
+    newScheduleJson,
+    teamScheduleJson,
+    editable,
+    editBase,
+    callbackURL,
+    selectedWeek
+) {
+    if (!window.__scheduleInits) window.__scheduleInits = [];
+
+    window.__scheduleInits.push(function () {
+
+         
+
+        const DAYS = ["Mon","Tue","Wed","Thu","Fri"];
+        const DISPLAY_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        const displayDays = DISPLAY_DAYS;
+        const START_HOUR =  7 ;
+        const END_HOUR =  19 ;
+        const SELECTABLE_MINUTES = [0,10,15,20,30,40,45,50];
+        const MIN_HOURS_PER_DAY = 3;
+        const MAX_HOURS_PER_DAY = 9;
+
+         
+
+        let masterSchedule = {};
+        let currentSchedule = {};
+        let teamSchedule = {};
+        let originalSchedule = {};
+        let isDragging = false;
+        let dragMode = null;
+
+         
+
+        const container = document.getElementById(scheduleName);
+        const editBtn = document.getElementById(scheduleName + "-edit-btn");
+        const cancelBtn = document.getElementById(scheduleName + "-cancel-btn");
+        const submitBtn = document.getElementById(scheduleName + "-submit-btn");
+        const submitForm = document.getElementById(scheduleName + "-submit-form");
+        const scheduleInput = document.getElementById(scheduleName + "-schedule-input");
+        const totalEl = document.getElementById(scheduleName + "-total-hours");
+        const diffEl = document.getElementById(scheduleName + "-total-diff-hours");
+
+        if (!container) return;
+
+        const tooltip = document.createElement("div");
+        tooltip.className = "schedule-tooltip";
+        document.body.appendChild(tooltip);
+
+        function showTooltip(target, text) {
+            tooltip.textContent = text;
+            const r = target.getBoundingClientRect();
+            const x = Math.min(window.innerWidth - 10, Math.max(10, r.left + r.width / 2));
+            const y = Math.max(10, r.top - 10);
+            tooltip.style.left = x + "px";
+            tooltip.style.top = y + "px";
+            tooltip.style.transform = "translate(-50%, -100%)";
+            tooltip.classList.add("is-visible");
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove("is-visible");
+        }
+
+
+         
+
+        const fmtTime = (minute) => {
+            const h24 = Math.floor(minute / 60);
+            const m = minute % 60;
+            const ampm = h24 < 12 ? "AM" : "PM";
+            const h12 = h24 % 12 || 12;
+            return `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+        };
+
+        const describeSlot = (day, minute) => {
+            const state = slotState(day, minute);
+
+            let status = "Empty";
+            if (state === "bg-blue-slot") status = "Normal schedule";
+            if (state === "bg-green-slot") status = "Added";
+            if (state === "bg-red-slot") status = "Removed";
+            if (state === "bg-unselectable") status = "Unavailable";
+
+            const start = fmtTime(minute);
+            const end = fmtTime(minute + slotLength(minute));
+            return `${day} ${start}–${end}: ${status}`;
+        };
+
+
+        const emptySchedule = () => {
+            const s = {};
+            DAYS.forEach(d => s[d] = []);
+            return s;
+        };
+
+        const availableSchedule = () => {
+            const s = emptySchedule();
+            DAYS.forEach(day => {
+                for (let hour = START_HOUR; hour < END_HOUR; hour++) {
+                    SELECTABLE_MINUTES.forEach(minute => {
+                        const time = hour * 60 + minute;
+                        if (time >= 450 && time <= 1110) s[day].push(time);
+                    });
+                }
+            });
+            return s;
+        };
+
+        const clone = obj => JSON.parse(JSON.stringify(obj));
+
+        const sanitize = raw => {
+            const s = emptySchedule();
+            if (!raw) return s;
+            DAYS.forEach(day => {
+                s[day] = (raw[day] || []).filter(m => {
+                    const h = Math.floor(m / 60);
+                    const min = m % 60;
+                    return h >= START_HOUR && h < END_HOUR && SELECTABLE_MINUTES.includes(min);
+                });
+            });
+            return s;
+        };
+
+        const slotLength = minute => {
+            const idx = SELECTABLE_MINUTES.indexOf(minute % 60);
+            if (idx >= 0 && idx < SELECTABLE_MINUTES.length - 1)
+                return SELECTABLE_MINUTES[idx + 1] - minute % 60;
+            if (idx === SELECTABLE_MINUTES.length - 1)
+                return 60 - minute % 60;
+            return 5;
+        };
+
+        const blocks = mins => {
+            if (!mins.length) return [];
+            const sorted = [...mins].sort((a,b)=>a-b);
+            const out = [];
+            let s = sorted[0], e = sorted[0];
+            for (let i=1;i<sorted.length;i++) {
+                if (sorted[i] === sorted[i-1] + slotLength(sorted[i-1])) e = sorted[i];
+                else { out.push({s,e}); s = e = sorted[i]; }
+            }
+            out.push({s,e});
+            return out.map(b => ({
+                start: b.s,
+                end: b.e + slotLength(b.e),
+                last: b.e
+            }));
+        };
+
+        const totalMinutes = (day, sched) =>
+            blocks(sched[day] || []).reduce((s,b)=>s+(b.end-b.start),0);
+
+        const slotState = (day, minute) => {
+            if (!teamSchedule[day]?.includes(minute)) return "bg-unselectable";
+            const inC = currentSchedule[day].includes(minute);
+            const inM = masterSchedule[day].includes(minute);
+
+            if (editBase) return inC ? "bg-blue-slot" : "bg-empty-slot";
+            if (inC && !inM) return "bg-green-slot";
+            if (!inC && inM) return "bg-red-slot";
+            if (inC && inM) return "bg-blue-slot";
+            return "bg-empty-slot";
+        };
+
+        function addShiftLabels(day, blocks, rowIndex) {
+            blocks.forEach(b => {
+                const startMin = b.start % 60;
+                const startHour = Math.floor(b.start / 60);
+
+                const lastMin = b.last % 60;
+                const lastHour = Math.floor(b.last / 60);
+
+                const startCol =
+                    2 +
+                    (startHour - START_HOUR) * SELECTABLE_MINUTES.length +
+                    SELECTABLE_MINUTES.indexOf(startMin);
+
+                const endCol =
+                    3 +
+                    (lastHour - START_HOUR) * SELECTABLE_MINUTES.length +
+                    SELECTABLE_MINUTES.indexOf(lastMin);
+
+                
+                if (startMin !== 0) {
+                    const lbl = document.createElement("div");
+                    lbl.className = "shift-label start-label";
+                    lbl.textContent =
+                        `${startHour % 12 || 12}:${String(startMin).padStart(2, "0")}`;
+                    lbl.style.gridRowStart = rowIndex;
+                    lbl.style.gridColumnStart = startCol;
+                    container.appendChild(lbl);
+                }
+
+                
+                if (lastMin !== 50) {
+                    const lbl = document.createElement("div");
+                    lbl.className = "shift-label end-label";
+                    lbl.textContent =
+                        `${lastHour % 12 || 12}:${String(b.end % 60).padStart(2, "0")}`;
+                    lbl.style.gridRowStart = rowIndex;
+                    lbl.style.gridColumnStart = endCol;
+                    container.appendChild(lbl);
+                }
+            });
+        }
+
+
+
+         
+
+        masterSchedule = sanitize(baseScheduleJson);
+        teamSchedule = availableSchedule();
+        currentSchedule = Object.keys(newScheduleJson||{}).length
+            ? sanitize(newScheduleJson)
+            : clone(masterSchedule);
+
+         
+
+        function render(editing) {
+            container.innerHTML = "";
+            container.classList.toggle("is-editable", editing);
+
+            const cols = (END_HOUR - START_HOUR) * SELECTABLE_MINUTES.length;
+            const rows = DAYS.length + 1; 
+            container.style.gridTemplateRows =
+                `auto repeat(${rows - 1}, 2rem)`;
+
+            container.style.gridTemplateColumns =
+                `auto repeat(${cols}, minmax(0,1fr)) auto`;
+
+            for (let h=START_HOUR;h<END_HOUR;h++) {
+                const d = document.createElement("div");
+                d.className = "schedule-hour-header";
+                d.textContent = (h%12||12)+(h<12?" am":" pm");
+                d.style.gridColumnStart =
+                    2+(h-START_HOUR)*SELECTABLE_MINUTES.length;
+                d.style.gridRowStart = 1;
+                container.appendChild(d);
+            }
+
+            
+            for (let h = START_HOUR + 1; h < END_HOUR; h++) {
+                const divider = document.createElement("div");
+                divider.className = "hour-divider";
+                divider.style.gridColumnStart =
+                    2 + (h - START_HOUR) * SELECTABLE_MINUTES.length;
+                divider.style.gridColumnEnd = "span 1";
+                
+                container.appendChild(divider);
+            }
+
+            DAYS.forEach((day,row)=> {
+                const lbl = document.createElement("div");
+                lbl.className = "day-label";
+                lbl.textContent = day;
+                lbl.style.gridRowStart = row+2;
+                lbl.style.gridColumnStart = 1;
+                container.appendChild(lbl);
+
+                for (let h=START_HOUR;h<END_HOUR;h++) {
+                    SELECTABLE_MINUTES.forEach((m,i)=> {
+                    const min = h*60+m;
+                    const c = document.createElement("div");
+                    c.className = "schedule-cell " + slotState(day,min);
+                    c.dataset.day = day;
+                    c.dataset.minute = min;
+                    c.style.gridRowStart = row+2;
+                    c.style.gridColumnStart =
+                        2+(h-START_HOUR)*SELECTABLE_MINUTES.length+i;
+
+                    
+                    const label = describeSlot(day, min);
+                    c.setAttribute("role", "gridcell");
+                    c.setAttribute("aria-label", label);
+                    c.tabIndex = teamSchedule[day]?.includes(min) ? 0 : -1;
+                    c.title = label;
+
+                    if (editing && teamSchedule[day]?.includes(min)) {
+                        c.addEventListener("mousedown", ()=>beginDrag(day,min));
+                    }
+
+                    container.appendChild(c);
+                    });
+                }
+
+                const dayBlocks = blocks(currentSchedule[day] || []);
+                addShiftLabels(day, dayBlocks, row + 2);
+
+                const t = document.createElement("div");
+                t.id = scheduleName+"-total-hours-"+day;
+                t.className = "schedule-cell day-total-hours";
+                t.style.gridRowStart = row+2;
+                t.style.gridColumnStart = cols+2;
+                container.appendChild(t);
+            });
+
+
+            updateTotals();
+        }
+
+         
+
+        function beginDrag(day, minute) {
+            if (!container.classList.contains("is-editable")) return;
+            isDragging = true;
+            dragMode = currentSchedule[day].includes(minute) ? "remove" : "add";
+            toggleMinute(day, minute);
+        }
+
+        function toggleMinute(day, minute) {
+            if (!teamSchedule[day]?.includes(minute)) return;
+            const arr = currentSchedule[day];
+            const idx = arr.indexOf(minute);
+            if (dragMode==="add" && idx===-1) {
+                const nextSchedule = {...currentSchedule, [day]: [...arr, minute]};
+                if (totalMinutes(day, nextSchedule) / 60 > MAX_HOURS_PER_DAY) return;
+                arr.push(minute);
+            }
+            if (dragMode==="remove" && idx!==-1) arr.splice(idx,1);
+            arr.sort((a,b)=>a-b);
+
+            const cell = container.querySelector(
+                `[data-day="${day}"][data-minute="${minute}"]`
+            );
+            if (cell) cell.className = "schedule-cell "+slotState(day,minute);
+            if (cell) {
+                const label = describeSlot(day, minute);
+                cell.setAttribute("aria-label", label);
+                cell.title = label;
+            }
+
+            updateTotals();
+        }
+
+         
+
+        function updateTotals() {
+            let total=0;
+            DAYS.forEach(day=>{
+                const mins = totalMinutes(day,currentSchedule);
+                total+=mins;
+                const el=document.getElementById(scheduleName+"-total-hours-"+day);
+                if (!el) return;
+                let html=mins?`<strong>${(mins/60).toFixed(2)} hrs</strong>`:"Off";
+                if (!editBase) {
+                    const diff=mins-totalMinutes(day,masterSchedule);
+                    if (diff!==0) {
+                        html+=` <span class="${diff>0?"text-green-600":"text-red-600"} text-xs">
+                            (${diff>0?"+":""}${(diff/60).toFixed(2)})
+                        </span>`;
+                    }
+                }
+                el.innerHTML=html;
+            });
+            totalEl.textContent=`(${(total/60).toFixed(2)} hrs)`;
+        }
+
+         
+
+        if (editable) {
+            editBtn.onclick=()=>{
+                originalSchedule=clone(currentSchedule);
+                editBtn.classList.add("hidden");
+                cancelBtn.classList.remove("hidden");
+                submitBtn.classList.remove("hidden");
+                render(true);
+            };
+
+            cancelBtn.onclick=()=>{
+                currentSchedule=clone(originalSchedule);
+                if (editBase) masterSchedule=clone(currentSchedule);
+                cancelBtn.classList.add("hidden");
+                submitBtn.classList.add("hidden");
+                editBtn.classList.remove("hidden");
+                render(false);
+            };
+
+            submitBtn.onclick=(event)=>{
+                event.preventDefault();
+                for (const day of DAYS) {
+                    const hours = totalMinutes(day, currentSchedule) / 60;
+                    if (hours > 0 && hours < MIN_HOURS_PER_DAY) {
+                        window.alert(`${day} must have at least ${MIN_HOURS_PER_DAY} hours.`);
+                        return;
+                    }
+                    if (hours > MAX_HOURS_PER_DAY) {
+                        window.alert(`${day} cannot exceed ${MAX_HOURS_PER_DAY} hours.`);
+                        return;
+                    }
+                }
+
+                scheduleInput.value = JSON.stringify(currentSchedule);
+                htmx.trigger(submitForm, "submit");
+            };
+
+            submitForm.addEventListener("htmx:afterRequest", event => {
+                if (!event.detail.successful) return;
+                cancelBtn.classList.add("hidden");
+                submitBtn.classList.add("hidden");
+                editBtn.classList.remove("hidden");
+                render(false);
+            });
+        }
+
+        container.addEventListener("mouseover",e=>{
+            if (isDragging && e.target.dataset.minute)
+                toggleMinute(e.target.dataset.day,+e.target.dataset.minute);
+        });
+
+        document.addEventListener("mouseup",()=>{
+            isDragging=false;
+            dragMode=null;
+        });
+
+        render(false);
+    });
+
+    if (document.readyState !== "loading") {
+        window.__scheduleInits.forEach(fn=>fn());
+        window.__scheduleInits=[];
+    } else {
+        document.addEventListener("DOMContentLoaded",()=>{
+            window.__scheduleInits.forEach(fn=>fn());
+            window.__scheduleInits=[];
+        });
+    }
+
+})(
+    "id-a82dd6d7-f6de-4617-8432-85bc55ec8091",
+    {"Fri":[],"Mon":[],"Sat":[],"Sun":[],"Thu":[],"Tue":[],"Wed":[]},
+    {"Fri":[],"Mon":[],"Sat":[],"Sun":[],"Thu":[],"Tue":[],"Wed":[]},
+    {"Fri":[],"Sat":[],"Sun":[],"Thu":[],"Tue":[]},
+     true ,
+     true ,
+    "\/schedule\/master?team=277\u0026user=2506\u0026semester=20265",
+     0 
+);
+</script>
+
+
+                    
+	            </div>
+{{end}}

@@ -1,6 +1,11 @@
-{{define "title"}}Home{{end}}
+{{define "home"}}
+<section class = "home-shell">
+    <div class  = "home-backdrop"></div>
 
-{{define "main"}}
-    <h2>Latest Snippets</h2>
-    <p>There's nothing to see here yet!</p>
+    <div class = "home-overlay">
+        <h2>Kev's Shift Scheduler</h2>
+        <p>Upcoming staff and availability overview.</p>
+    </div>
+  {{template "schedule_grid" .}}
+</section>
 {{end}}
