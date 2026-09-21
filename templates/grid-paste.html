@@ -349,7 +349,6 @@
     teamScheduleJson,
     editable,
     editBase,
-    callbackURL,
     selectedWeek
 ) {
     if (!window.__scheduleInits) window.__scheduleInits = [];
@@ -364,8 +363,10 @@
         const START_HOUR =  7 ;
         const END_HOUR =  19 ;
         const SELECTABLE_MINUTES = [0,10,15,20,30,40,45,50];
-        const MIN_HOURS_PER_DAY = 3;
+        const MIN_SHIFT_HOURS = 3;
         const MAX_HOURS_PER_DAY = 9;
+        const MIN_WEEKLY_HOURS = 20;
+        const MAX_WEEKLY_HOURS = 40;
 
          
 
@@ -375,6 +376,7 @@
         let originalSchedule = {};
         let isDragging = false;
         let dragMode = null;
+        let isEditing = false;
 
          
 
@@ -706,6 +708,7 @@
 
         if (editable) {
             editBtn.onclick=()=>{
+                isEditing = true;
                 originalSchedule=clone(currentSchedule);
                 editBtn.classList.add("hidden");
                 cancelBtn.classList.remove("hidden");
@@ -714,8 +717,10 @@
             };
 
             cancelBtn.onclick=()=>{
+                if (!isEditing) return;
                 currentSchedule=clone(originalSchedule);
                 if (editBase) masterSchedule=clone(currentSchedule);
+                isEditing = false;
                 cancelBtn.classList.add("hidden");
                 submitBtn.classList.add("hidden");
                 editBtn.classList.remove("hidden");
@@ -724,16 +729,27 @@
 
             submitBtn.onclick=(event)=>{
                 event.preventDefault();
+                let weeklyHours = 0;
                 for (const day of DAYS) {
                     const hours = totalMinutes(day, currentSchedule) / 60;
-                    if (hours > 0 && hours < MIN_HOURS_PER_DAY) {
-                        window.alert(`${day} must have at least ${MIN_HOURS_PER_DAY} hours.`);
-                        return;
-                    }
                     if (hours > MAX_HOURS_PER_DAY) {
                         window.alert(`${day} cannot exceed ${MAX_HOURS_PER_DAY} hours.`);
                         return;
                     }
+
+                    weeklyHours += hours;
+                    for (const block of blocks(currentSchedule[day] || [])) {
+                        const shiftHours = (block.end - block.start) / 60;
+                        if (shiftHours < MIN_SHIFT_HOURS) {
+                            window.alert(`${day} has a shift shorter than ${MIN_SHIFT_HOURS} consecutive hours.`);
+                            return;
+                        }
+                    }
+                }
+
+                if (weeklyHours < MIN_WEEKLY_HOURS || weeklyHours > MAX_WEEKLY_HOURS) {
+                    window.alert(`The weekly schedule must be between ${MIN_WEEKLY_HOURS} and ${MAX_WEEKLY_HOURS} hours.`);
+                    return;
                 }
 
                 scheduleInput.value = JSON.stringify(currentSchedule);
@@ -742,6 +758,7 @@
 
             submitForm.addEventListener("htmx:afterRequest", event => {
                 if (!event.detail.successful) return;
+                isEditing = false;
                 cancelBtn.classList.add("hidden");
                 submitBtn.classList.add("hidden");
                 editBtn.classList.remove("hidden");
@@ -779,12 +796,11 @@
     {"Fri":[],"Sat":[],"Sun":[],"Thu":[],"Tue":[]},
      true ,
      true ,
-    "\/schedule\/master?team=277\u0026user=2506\u0026semester=20265",
-     0 
+    0 
 );
 </script>
 
 
                     
-	            </div>
+</div>
 {{end}}
