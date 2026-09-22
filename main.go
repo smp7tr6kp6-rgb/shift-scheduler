@@ -17,6 +17,8 @@ func main() {
 	defer db.Close()
 	submissionStore = db
 
+	mux.HandleFunc("GET /login", loginPageHandler)
+	mux.HandleFunc("POST /login", loginHandler)
 	mux.HandleFunc("/", homeHandler)
 	mux.HandleFunc("POST /schedule/master", scheduleMasterHandler)
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))

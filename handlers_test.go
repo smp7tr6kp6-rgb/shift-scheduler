@@ -79,13 +79,39 @@ func testSubmissionStore(t *testing.T) *sql.DB {
 	t.Cleanup(func() { db.Close() })
 	return db
 }
-
 func postSchedule(t *testing.T, schedule string) *httptest.ResponseRecorder {
 	t.Helper()
-	request := httptest.NewRequest(http.MethodPost, "/schedule/master", strings.NewReader("schedule="+schedule))
+
+	token, err := generateToken()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	sessions.mu.Lock()
+	sessions.sessions[token] = "student1"
+	sessions.mu.Unlock()
+
+	t.Cleanup(func() {
+		sessions.mu.Lock()
+		delete(sessions.sessions, token)
+		sessions.mu.Unlock()
+	})
+
+	request := httptest.NewRequest(
+		http.MethodPost,
+		"/schedule/master",
+		strings.NewReader("schedule="+schedule),
+	)
+
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	request.AddCookie(&http.Cookie{
+		Name:  "session",
+		Value: token,
+	})
+
 	response := httptest.NewRecorder()
 	scheduleMasterHandler(response, request)
+
 	return response
 }
 

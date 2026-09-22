@@ -1,0 +1,35 @@
+{{define "login"}}
+<section class="max-w-md mx-auto mt-12">
+    <h2 class="text-2xl font-bold mb-6">Log In</h2>
+
+    <form
+        hx-post="/login"
+        hx-target="#login-result"
+        hx-swap="innerHTML"
+    >
+        <div class="mb-4">
+            <label for="username" class="block mb-2 font-medium">
+                Username
+            </label>
+
+            <input
+                id="username"
+                name="username"
+                type="text"
+                class="border rounded-lg px-3 py-2 w-full"
+                placeholder="student1 or admin1"
+                required
+            >
+        </div>
+
+        <button
+            type="submit"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+            Log In
+        </button>
+    </form>
+
+    <div id="login-result" class="mt-4"></div>
+</section>
+{{end}}

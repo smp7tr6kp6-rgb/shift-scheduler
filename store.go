@@ -9,7 +9,7 @@ import (
 )
 
 type ScheduleSubmission struct {
-	EmployeeID       int
+	Username         string
 	ID               int64
 	Schedule         map[string][]int
 	Status           string
@@ -27,12 +27,14 @@ func openSubmissionStore(path string) (*sql.DB, error) {
 
 	const schema = `
 CREATE TABLE IF NOT EXISTS schedule_submissions (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	employee_id INTEGER NOT NULL,
-	schedule_json TEXT NOT NULL,
-	status TEXT NOT NULL CHECK (status IN ('pending', 'approved', 'rejected')),
-	rejection_comment TEXT NOT NULL DEFAULT '',
-	submitted_at TEXT NOT NULL
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    schedule_json TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (
+        status IN ('pending', 'approved', 'rejected')
+    ),
+    rejection_comment TEXT NOT NULL DEFAULT '',
+    submitted_at TEXT NOT NULL
 );`
 
 	if _, err := db.Exec(schema); err != nil {
@@ -45,7 +47,7 @@ CREATE TABLE IF NOT EXISTS schedule_submissions (
 
 func saveSubmission(
 	db *sql.DB,
-	employeeID int,
+	username string,
 	schedule map[string][]int,
 ) (int64, error) {
 	encoded, err := json.Marshal(schedule)
@@ -60,22 +62,20 @@ func saveSubmission(
 	err = db.QueryRow(`
 		SELECT id
 		FROM schedule_submissions
-		WHERE employee_id = ?
+		WHERE username = ?
 		  AND status IN ('pending', 'rejected')
 		ORDER BY id DESC
 		LIMIT 1
-	`,
-		employeeID,
-	).Scan(&id)
+	`, username).Scan(&id)
 
 	if err == sql.ErrNoRows {
 		result, err := db.Exec(`
 			INSERT INTO schedule_submissions
-				(employee_id, schedule_json, status, rejection_comment, submitted_at)
+				(username, schedule_json, status, rejection_comment, submitted_at)
 			VALUES
 				(?, ?, 'pending', '', ?)
 		`,
-			employeeID,
+			username,
 			string(encoded),
 			submittedAt,
 		)
@@ -99,13 +99,13 @@ func saveSubmission(
 			rejection_comment = '',
 			submitted_at = ?
 		WHERE id = ?
-		  AND employee_id = ?
+		  AND username = ?
 		  AND status IN ('pending', 'rejected')
 	`,
 		string(encoded),
 		submittedAt,
 		id,
-		employeeID,
+		username,
 	)
 
 	if err != nil {
