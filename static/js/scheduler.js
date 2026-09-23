@@ -4,13 +4,24 @@ const START_MINUTE = 8 * 60;
 const END_MINUTE = 18 * 60;
 const SLOT_LENGTH = 10;
 
-const schedule = {
+/*
+ * These mirror the constants in handlers.go. The server is the authority;
+ * these only exist so the user gets feedback before submitting.
+ */
+const MIN_SHIFT_MINUTES = 3 * 60;
+const MAX_DAILY_MINUTES = 9 * 60;
+const MIN_WEEKLY_MINUTES = 20 * 60;
+const MAX_WEEKLY_MINUTES = 40 * 60;
+
+let schedule = {
     Mon: [],
     Tue: [],
     Wed: [],
     Thu: [],
     Fri: []
 };
+
+let readOnly = false;
 
 let dragging = false;
 let dragDay = null;
@@ -34,8 +45,52 @@ function initializeScheduler() {
         return;
     }
 
+    readOnly = grid.dataset.readonly === "true";
+
+    schedule = loadSavedSchedule();
+
     createGrid(grid);
     updateDisplay();
+}
+
+
+/*
+ * The server writes the user's stored schedule into window.SAVED_SCHEDULE so
+ * a pending or rejected schedule comes back on reload instead of an empty grid.
+ */
+function loadSavedSchedule() {
+
+    const empty = {
+        Mon: [],
+        Tue: [],
+        Wed: [],
+        Thu: [],
+        Fri: []
+    };
+
+    const saved = window.SAVED_SCHEDULE;
+
+    if (!saved || typeof saved !== "object") {
+        return empty;
+    }
+
+    for (const day of days) {
+
+        if (!Array.isArray(saved[day])) {
+            continue;
+        }
+
+        empty[day] = saved[day]
+            .filter(minute =>
+                Number.isInteger(minute) &&
+                minute >= START_MINUTE &&
+                minute < END_MINUTE &&
+                minute % SLOT_LENGTH === 0
+            )
+            .sort((a, b) => a - b);
+    }
+
+    return empty;
 }
 
 
@@ -106,6 +161,10 @@ function createGrid(grid) {
 
 
 function startDrag(day, minute) {
+
+    if (readOnly) {
+        return;
+    }
 
     dragging = true;
 
@@ -311,6 +370,43 @@ function updateForm() {
 }
 
 
+/*
+ * Group a day's selected slots into contiguous shifts, so the 3 hour minimum
+ * can be checked per shift rather than per day. Mirrors scheduleBlocks in
+ * handlers.go.
+ */
+function shiftBlocks(minutes) {
+
+    if (minutes.length === 0) {
+        return [];
+    }
+
+    const sorted = [...minutes].sort((a, b) => a - b);
+
+    const blocks = [];
+
+    let start = sorted[0];
+    let last = sorted[0];
+
+    for (const minute of sorted.slice(1)) {
+
+        if (minute === last + SLOT_LENGTH) {
+            last = minute;
+            continue;
+        }
+
+        blocks.push({ start: start, end: last + SLOT_LENGTH });
+
+        start = minute;
+        last = minute;
+    }
+
+    blocks.push({ start: start, end: last + SLOT_LENGTH });
+
+    return blocks;
+}
+
+
 function validateClientSide() {
 
     const validation =
@@ -327,6 +423,20 @@ function validateClientSide() {
         return;
     }
 
+    const problem = findScheduleProblem();
+
+    validation.textContent = problem === null ? "" : problem;
+
+    submitButton.disabled = problem !== null;
+}
+
+
+/*
+ * Returns the first rule the current selection breaks, or null when the
+ * schedule is valid. These checks mirror validateSchedule in handlers.go.
+ */
+function findScheduleProblem() {
+
     let weeklyMinutes = 0;
 
     for (const day of days) {
@@ -337,40 +447,27 @@ function validateClientSide() {
 
         weeklyMinutes += minutes;
 
-        if (minutes > 9 * 60) {
+        if (minutes > MAX_DAILY_MINUTES) {
+            return `${day} exceeds the 9 hour daily limit.`;
+        }
 
-            validation.textContent =
-                `${day} exceeds the 9 hour daily limit.`;
+        for (const block of shiftBlocks(schedule[day])) {
 
-            submitButton.disabled = true;
-
-            return;
+            if (block.end - block.start < MIN_SHIFT_MINUTES) {
+                return `${day} has a shift shorter than 3 consecutive hours.`;
+            }
         }
     }
 
-    if (weeklyMinutes < 20 * 60) {
-
-        validation.textContent =
-            "You need at least 20 hours per week.";
-
-        submitButton.disabled = true;
-
-        return;
+    if (weeklyMinutes < MIN_WEEKLY_MINUTES) {
+        return "You need at least 20 hours per week.";
     }
 
-    if (weeklyMinutes > 40 * 60) {
-
-        validation.textContent =
-            "You cannot exceed 40 hours per week.";
-
-        submitButton.disabled = true;
-
-        return;
+    if (weeklyMinutes > MAX_WEEKLY_MINUTES) {
+        return "You cannot exceed 40 hours per week.";
     }
 
-    validation.textContent = "";
-
-    submitButton.disabled = false;
+    return null;
 }
 
 

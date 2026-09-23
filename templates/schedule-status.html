@@ -1,7 +1,7 @@
 {{define "schedule-status"}}
 
-<div class="schedule-status pending">
-    Pending Approval
+<div class="schedule-status status-{{.Status}}">
+    {{.Message}}
 </div>
 
 {{end}}

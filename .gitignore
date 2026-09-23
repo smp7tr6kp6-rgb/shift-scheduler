@@ -1,0 +1,12 @@
+# SQLite database files are runtime state, not source.
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Compiled binaries
+/shift-scheduler
+/shiftsrv
+
+.DS_Store
+/shift-scheduler.kmanning.net

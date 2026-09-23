@@ -53,7 +53,21 @@ var sessions = sessionStore{
 	sessions: make(map[string]Session),
 }
 
-var templates = template.Must(template.ParseGlob("./templates/*.html"))
+// statusFragment is the data the schedule-status partial renders.
+type statusFragment struct {
+	Status  string
+	Message string
+}
+
+var templateFuncs = template.FuncMap{
+	"statusView": func(status, message string) statusFragment {
+		return statusFragment{Status: status, Message: message}
+	},
+}
+
+var templates = template.Must(
+	template.New("").Funcs(templateFuncs).ParseGlob("./templates/*.html"),
+)
 
 func render(w http.ResponseWriter, r *http.Request, name string, data any) {
 	var page bytes.Buffer
@@ -72,10 +86,16 @@ func render(w http.ResponseWriter, r *http.Request, name string, data any) {
 		return
 	}
 
+	user, loggedIn := getLoggedInUser(r)
+
 	pageData := struct {
-		Content template.HTML
+		Content  template.HTML
+		User     User
+		LoggedIn bool
 	}{
-		Content: template.HTML(page.String()),
+		Content:  template.HTML(page.String()),
+		User:     user,
+		LoggedIn: loggedIn,
 	}
 
 	if err := templates.ExecuteTemplate(w, "base", pageData); err != nil {
@@ -86,6 +106,13 @@ func render(w http.ResponseWriter, r *http.Request, name string, data any) {
 
 // whenever user goes to website, it takes them to login first
 func homeHandlerRedirect(w http.ResponseWriter, r *http.Request) {
+	// "/" is a catch-all pattern, so anything that did not match a real route
+	// lands here. Only the root path should render the home page.
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
 	_, ok := getLoggedInUsername(r)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -203,11 +230,89 @@ func getLoggedInUsername(r *http.Request) (string, bool) {
 	return session.Username, true
 }
 
+// schedulerView is what the scheduler template needs in order to show the
+// user's own saved schedule, its current status, and any rejection comment.
+type schedulerView struct {
+	Username         string
+	Status           string // "", "pending", "approved" or "rejected"
+	StatusMessage    string
+	RejectionComment string
+	ScheduleJSON     template.JS
+	ReadOnly         bool
+}
+
+func statusMessage(status string) string {
+	switch status {
+	case "pending":
+		return "Pending Approval"
+	case "approved":
+		return "Approved - this schedule is view-only until an admin resets it."
+	case "rejected":
+		return "Rejected - update your schedule and resubmit."
+	default:
+		return "No schedule submitted yet."
+	}
+}
+
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	render(w, r, "home", nil)
+	username, ok := getLoggedInUsername(r)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	view := schedulerView{
+		Username:     username,
+		ScheduleJSON: template.JS("null"),
+	}
+
+	if submissionStore != nil {
+		submission, err := getLatestSubmission(submissionStore, username)
+		if err != nil {
+			log.Println("load latest submission:", err)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		if submission != nil {
+			view.Status = submission.Status
+			view.RejectionComment = submission.RejectionComment
+			view.ReadOnly = submission.Status == "approved"
+
+			// scheduler.html assigns this to window.SAVED_SCHEDULE, which
+			// scheduler.js reads to repopulate the grid.
+			encoded, err := json.Marshal(submission.Schedule)
+			if err != nil {
+				log.Println("encode saved schedule:", err)
+				http.Error(w, "internal server error", http.StatusInternalServerError)
+				return
+			}
+			view.ScheduleJSON = template.JS(encoded)
+		}
+	}
+
+	view.StatusMessage = statusMessage(view.Status)
+
+	render(w, r, "home", view)
 }
 
 func scheduleMasterHandler(w http.ResponseWriter, r *http.Request) {
+	// Authorise before doing any work, so an anonymous request cannot use the
+	// validator as a free oracle.
+	username, ok := getLoggedInUsername(r)
+	if !ok {
+		writeScheduleError(w, http.StatusUnauthorized, "You must be logged in.")
+		return
+	}
+
+	if submissionStore == nil {
+		writeScheduleError(w, http.StatusInternalServerError, "Schedule storage is unavailable.")
+		return
+	}
+
+	// Cap the body so a huge POST cannot exhaust memory.
+	r.Body = http.MaxBytesReader(w, r.Body, maxScheduleBodyBytes)
+
 	if err := r.ParseForm(); err != nil {
 		writeScheduleError(w, http.StatusBadRequest, "Could not read the schedule submission.")
 		return
@@ -224,25 +329,22 @@ func scheduleMasterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if submissionStore == nil {
-		writeScheduleError(w, http.StatusInternalServerError, "Schedule storage is unavailable.")
-		return
-	}
-
-	username, ok := getLoggedInUsername(r)
-	if !ok {
-		writeScheduleError(w, http.StatusUnauthorized, "You must be logged in.")
-		return
-	}
-
 	if _, err := saveSubmission(submissionStore, username, schedule); err != nil {
+		if err == errScheduleLocked {
+			writeScheduleError(
+				w,
+				http.StatusConflict,
+				"Your schedule is already approved and is view-only until an admin resets it.",
+			)
+			return
+		}
+
 		log.Println("save schedule submission:", err)
 		writeScheduleError(w, http.StatusInternalServerError, "Could not save the schedule submission.")
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write([]byte(`<span id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-status" class="status-badge ml-2 flex-shrink-0 inline-block px-2 py-0.5 text-xs font-semibold rounded-full text-yellow-800 bg-yellow-100">Pending</span>`))
+	writeScheduleStatus(w, http.StatusOK, "pending", statusMessage("pending"))
 }
 
 // limits/constraints of how short or long you can work each shift, day, week
@@ -251,6 +353,12 @@ const (
 	maxDailyMinutes  = 9 * 60
 	minWeeklyMinutes = 20 * 60
 	maxWeeklyMinutes = 40 * 60
+
+	// The selectable window is Monday-Friday, 8am-6pm, in 10 minute slots.
+	// These must stay in step with static/js/scheduler.js.
+	dayStartMinute = 8 * 60
+	dayEndMinute   = 18 * 60
+	slotMinutes    = 10
 )
 
 // the days that are able to be selected to work on
@@ -282,8 +390,11 @@ func validateSchedule(schedule map[string][]int) error {
 		}
 
 		for _, minute := range sortedMinutes {
-			if minute < 480 || minute > 1080 || !selectableMinutes[minute%60] {
-				return fmt.Errorf("%s contains a time outside 7:30 AM to 6:30 PM", day)
+			// A slot is a 10 minute block identified by its start minute, so
+			// the last valid start is 5:50 PM and it ends at 6:00 PM.
+			if minute < dayStartMinute || minute > dayEndMinute-slotMinutes ||
+				!selectableMinutes[minute%60] {
+				return fmt.Errorf("%s contains a time outside 8:00 AM to 6:00 PM", day)
 			}
 		}
 
@@ -351,11 +462,33 @@ func slotLength(minute int) int {
 	return 10
 }
 
-func writeScheduleError(w http.ResponseWriter, status int, message string) {
+// maxScheduleBodyBytes bounds the size of a schedule POST body.
+const maxScheduleBodyBytes = 64 * 1024
+
+// writeScheduleStatus renders the schedule-status partial that HTMX swaps into
+// #schedule-status.
+func writeScheduleStatus(w http.ResponseWriter, code int, status, message string) {
+	view := statusFragment{Status: status, Message: message}
+
+	var body bytes.Buffer
+	if err := templates.ExecuteTemplate(&body, "schedule-status", view); err != nil {
+		log.Println("render schedule status:", err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.WriteHeader(status)
-	fmt.Fprintf(w, `<span id="id-a82dd6d7-f6de-4617-8432-85bc55ec8091-status" class="status-badge ml-2 flex-shrink-0 inline-block px-2 py-0.5 text-xs font-semibold rounded-full text-red-800 bg-red-100">%s</span>`, template.HTMLEscapeString(message))
+	w.WriteHeader(code)
+
+	if _, err := w.Write(body.Bytes()); err != nil {
+		log.Println(err)
+	}
 }
+
+func writeScheduleError(w http.ResponseWriter, status int, message string) {
+	writeScheduleStatus(w, status, "error", message)
+}
+
 func getLoggedInUser(r *http.Request) (User, bool) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
@@ -408,6 +541,13 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
+	// A plain <a href="/logout"> click is a normal navigation, so a 204 with an
+	// HX-Redirect header would leave the browser sitting on the old page.
+	if r.Header.Get("HX-Request") != "true" {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
 	// Tell HTMX to go back to the login page.
 	w.Header().Set("HX-Redirect", "/login")
 	w.WriteHeader(http.StatusNoContent)
@@ -438,9 +578,9 @@ func submissionsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	submissions, err := getPendingSubmissions(submissionStore)
+	submissions, err := getAllSubmissions(submissionStore)
 	if err != nil {
-		log.Println("get pending submissions:", err)
+		log.Println("get submissions:", err)
 		http.Error(w, "Could not load submissions.", http.StatusInternalServerError)
 		return
 	}
@@ -477,7 +617,7 @@ func approveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/admin/submissions", http.StatusSeeOther)
+	renderSubmissionList(w)
 }
 
 func rejectHandler(w http.ResponseWriter, r *http.Request) {
@@ -510,7 +650,68 @@ func rejectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/admin/submissions", http.StatusSeeOther)
+	renderSubmissionList(w)
+}
+
+func resetHandler(w http.ResponseWriter, r *http.Request) {
+	if _, ok := requireAdmin(w, r); !ok {
+		return
+	}
+
+	if submissionStore == nil {
+		http.Error(w, "submission storage is unavailable", http.StatusInternalServerError)
+		return
+	}
+
+	idString := r.PathValue("id")
+
+	comment := r.FormValue("comment")
+	if comment == "" {
+		comment = "An admin reset this schedule. Please review and resubmit."
+	}
+
+	submissionID, err := strconv.ParseInt(idString, 10, 64)
+	if err != nil {
+		http.Error(w, "invalid submission id", http.StatusBadRequest)
+		return
+	}
+
+	if err := resetSubmission(submissionStore, submissionID, comment); err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "submission not found or is not approved", http.StatusNotFound)
+			return
+		}
+
+		log.Println("reset submission:", err)
+		http.Error(w, "Could not reset submission.", http.StatusInternalServerError)
+		return
+	}
+
+	renderSubmissionList(w)
+}
+
+// renderSubmissionList re-renders the queue. Approve and reject reply
+// with it directly so HTMX can swap #submissions-container in one hop; a 303
+// would make HTMX swap the whole list into the single row it targeted.
+func renderSubmissionList(w http.ResponseWriter) {
+	submissions, err := getAllSubmissions(submissionStore)
+	if err != nil {
+		log.Println("get submissions:", err)
+		http.Error(w, "Could not load submissions.", http.StatusInternalServerError)
+		return
+	}
+
+	var body bytes.Buffer
+	if err := templates.ExecuteTemplate(&body, "submissions", submissions); err != nil {
+		log.Println("render submissions:", err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if _, err := body.WriteTo(w); err != nil {
+		log.Println(err)
+	}
 }
 
 func adminHandler(w http.ResponseWriter, r *http.Request) {

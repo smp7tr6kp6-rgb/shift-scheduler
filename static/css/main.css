@@ -579,3 +579,205 @@ footer {
         min-width: 800px;
     }
 }
+
+
+/* Schedule status banners */
+
+.schedule-status {
+    padding: 12px 16px;
+
+    margin: 12px 0;
+
+    border-radius: 4px;
+
+    border-left: 4px solid #AEB5BA;
+
+    background: #F3F4F6;
+
+    font-weight: bold;
+}
+
+.schedule-status.status-pending {
+    border-left-color: #D9A400;
+
+    background: #FDF6E3;
+
+    color: #7A5C00;
+}
+
+.schedule-status.status-approved {
+    border-left-color: #62CB31;
+
+    background: #EFFAEA;
+
+    color: #2F6B14;
+}
+
+.schedule-status.status-rejected,
+.schedule-status.status-error {
+    border-left-color: #C0392B;
+
+    background: #FDEDEC;
+
+    color: #922B21;
+}
+
+.rejection-comment {
+    font-style: italic;
+
+    font-weight: normal;
+}
+
+.scheduler-rules {
+    color: #6A6C6F;
+
+    font-size: 14px;
+}
+
+.schedule-locked {
+    margin-top: 10px;
+
+    color: #6A6C6F;
+
+    font-style: italic;
+}
+
+.schedule-grid[data-readonly="true"] .schedule-slot {
+    cursor: not-allowed;
+}
+
+
+/* Admin submission queue */
+
+.admin-overlay h2 {
+    margin-bottom: 10px;
+}
+
+.submissions {
+    border: 1px solid #D9DDE1;
+
+    border-radius: 5px;
+
+    background: #FFFFFF;
+
+    overflow: hidden;
+}
+
+.submissions-header,
+.submission-row {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+
+    gap: 12px;
+
+    align-items: center;
+
+    padding: 12px 16px;
+}
+
+.submissions-header {
+    background: #34495E;
+
+    color: #FFFFFF;
+
+    font-weight: bold;
+}
+
+.submission-row {
+    border-top: 1px solid #E4E5E7;
+}
+
+.submission-row:nth-child(2n) {
+    background: #F7F9FA;
+}
+
+.submissions p {
+    padding: 16px;
+
+    color: #6A6C6F;
+}
+
+.status-badge {
+    display: inline-block;
+
+    padding: 3px 10px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    text-transform: capitalize;
+}
+
+.status-badge.status-pending {
+    background: #FDF6E3;
+
+    color: #7A5C00;
+}
+
+.status-badge.status-approved {
+    background: #EFFAEA;
+
+    color: #2F6B14;
+}
+
+.status-badge.status-rejected {
+    background: #FDEDEC;
+
+    color: #922B21;
+}
+
+.submission-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    align-items: center;
+}
+
+.submission-actions form {
+    display: flex;
+
+    gap: 6px;
+
+    align-items: center;
+
+    margin: 0;
+}
+
+.submission-actions input[type="text"] {
+    padding: 6px 8px;
+
+    font-size: 14px;
+}
+
+.approve-button {
+    background-color: #62CB31 !important;
+
+    color: #FFFFFF !important;
+}
+
+.reject-button {
+    background-color: #C0392B !important;
+
+    color: #FFFFFF !important;
+}
+
+.submission-waiting {
+    color: #6A6C6F;
+
+    font-size: 14px;
+
+    font-style: italic;
+}
+
+.submission-user .rejection-comment {
+    display: block;
+
+    font-size: 13px;
+
+    color: #6A6C6F;
+}

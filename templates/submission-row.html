@@ -4,6 +4,9 @@
 
     <div class="submission-user">
         <strong>{{.Username}}</strong>
+        {{if .RejectionComment}}
+            <span class="rejection-comment">&ldquo;{{.RejectionComment}}&rdquo;</span>
+        {{end}}
     </div>
 
     <div class="submission-date">
@@ -18,35 +21,65 @@
 
     <div class="submission-actions">
 
-        <form
-            method="POST"
-            action="/admin/submissions/{{.ID}}/approve"
-            hx-post="/admin/submissions/{{.ID}}/approve"
-            hx-target="#submission-{{.ID}}"
-            hx-swap="outerHTML"
-        >
-            <button type="submit" class="approve-button">
-                Approve
-            </button>
-        </form>
+        {{if eq .Status "pending"}}
 
-        <form
-            method="POST"
-            action="/admin/submissions/{{.ID}}/reject"
-            hx-post="/admin/submissions/{{.ID}}/reject"
-            hx-target="#submission-{{.ID}}"
-            hx-swap="outerHTML"
-        >
-            <input
-                type="text"
-                name="comment"
-                placeholder="Reason for rejection"
+            <form
+                method="POST"
+                action="/admin/submissions/{{.ID}}/approve"
+                hx-post="/admin/submissions/{{.ID}}/approve"
+                hx-target="#submissions-container"
+                hx-swap="innerHTML"
             >
+                <button type="submit" class="approve-button">
+                    Approve
+                </button>
+            </form>
 
-            <button type="submit" class="reject-button">
-                Reject
-            </button>
-        </form>
+            <form
+                method="POST"
+                action="/admin/submissions/{{.ID}}/reject"
+                hx-post="/admin/submissions/{{.ID}}/reject"
+                hx-target="#submissions-container"
+                hx-swap="innerHTML"
+            >
+                <input
+                    type="text"
+                    name="comment"
+                    placeholder="Reason for rejection"
+                >
+
+                <button type="submit" class="reject-button">
+                    Reject
+                </button>
+            </form>
+
+        {{else if eq .Status "approved"}}
+
+            <form
+                method="POST"
+                action="/admin/submissions/{{.ID}}/reset"
+                hx-post="/admin/submissions/{{.ID}}/reset"
+                hx-target="#submissions-container"
+                hx-swap="innerHTML"
+            >
+                <input
+                    type="text"
+                    name="comment"
+                    placeholder="Reason for reset (optional)"
+                >
+
+                <button type="submit" class="reject-button">
+                    Reset
+                </button>
+            </form>
+
+        {{else}}
+
+            <span class="submission-waiting">
+                Waiting on the student to resubmit.
+            </span>
+
+        {{end}}
 
     </div>
 

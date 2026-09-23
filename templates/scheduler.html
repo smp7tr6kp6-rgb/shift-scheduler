@@ -5,7 +5,22 @@
     <div class="scheduler-title">
         <h2>My Schedule</h2>
         <p>Select your available working hours by dragging across the grid.</p>
+        <p class="scheduler-rules">
+            Monday&ndash;Friday, 8:00 AM&ndash;6:00 PM. Shifts must be at least
+            3 consecutive hours, no more than 9 hours in a day, and 20&ndash;40
+            hours for the week.
+        </p>
     </div>
+
+    {{if eq .Status "rejected"}}
+        <div class="schedule-status status-rejected">
+            Your schedule was rejected.
+            {{if .RejectionComment}}
+                <span class="rejection-comment">&ldquo;{{.RejectionComment}}&rdquo;</span>
+            {{end}}
+            Update it below and resubmit.
+        </div>
+    {{end}}
 
     <div class="scheduler">
 
@@ -38,7 +53,11 @@
             </div>
         </div>
 
-        <div id="schedule-grid" class="schedule-grid"></div>
+        <div
+            id="schedule-grid"
+            class="schedule-grid"
+            data-readonly="{{if .ReadOnly}}true{{else}}false{{end}}"
+        ></div>
 
     </div>
 
@@ -51,30 +70,46 @@
 
     <div id="schedule-validation"></div>
 
-    <form
-        id="schedule-form"
-        hx-post="/schedule/master"
-        hx-target="#schedule-status"
-        hx-swap="innerHTML"
-    >
+    {{if .ReadOnly}}
 
-        <input
-            type="hidden"
-            name="schedule"
-            id="schedule-json"
+        <p class="schedule-locked">
+            This schedule is approved and view-only until an admin resets it.
+        </p>
+
+    {{else}}
+
+        <form
+            id="schedule-form"
+            hx-post="/schedule/master"
+            hx-target="#schedule-status"
+            hx-swap="innerHTML"
         >
 
-        <button
-            type="submit"
-            id="submit-schedule"
-            class="schedule-submit"
-        >
-            Submit Schedule
-        </button>
+            <input
+                type="hidden"
+                name="schedule"
+                id="schedule-json"
+            >
 
-    </form>
+            <button
+                type="submit"
+                id="submit-schedule"
+                class="schedule-submit"
+            >
+                Submit Schedule
+            </button>
 
-    <div id="schedule-status"></div>
+        </form>
+
+    {{end}}
+
+    <div id="schedule-status">
+        {{if .Status}}
+            {{template "schedule-status" (statusView .Status .StatusMessage)}}
+        {{end}}
+    </div>
+
+    <script>window.SAVED_SCHEDULE = {{.ScheduleJSON}};</script>
 
 </section>
 

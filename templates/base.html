@@ -3,10 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shift Scheduler</title>
 
+    <!--
+      By default HTMX ignores the body of a 4xx response, which would hide every
+      server-side validation message. Allow 4xx bodies to swap so the Go
+      validator's errors actually reach the page.
+    -->
+    <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"4..","swap":true},{"code":"5..","swap":false,"error":true}]}'>
+
     <script src="https://unpkg.com/htmx.org@2.0.7"></script>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/css/main.css">
 </head>
 
 <body>
@@ -15,10 +23,25 @@
         <h1>Shift Scheduler</h1>
     </header>
 
+    <!-- main.css lays this out as two floated halves, so keep both divs. -->
     <nav>
-        <a href="/">Home</a>
-        <a href="/admin">Admin</a>
-        <a href="/logout">Logout</a>
+        <div>
+            {{if .LoggedIn}}
+                <a href="/">Home</a>
+                {{if eq .User.Role "admin"}}
+                    <a href="/admin">Admin</a>
+                {{end}}
+            {{else}}
+                <a href="/login">Log in</a>
+            {{end}}
+        </div>
+
+        <div>
+            {{if .LoggedIn}}
+                <span>{{.User.Username}} ({{.User.Role}})</span>
+                <a href="/logout">Logout</a>
+            {{end}}
+        </div>
     </nav>
 
     <main id="main-content">

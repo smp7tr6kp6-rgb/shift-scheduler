@@ -29,6 +29,7 @@ func main() {
 	mux.HandleFunc("GET /admin/submissions", submissionsHandler)
 	mux.HandleFunc("POST /admin/submissions/{id}/approve", approveHandler)
 	mux.HandleFunc("POST /admin/submissions/{id}/reject", rejectHandler)
+	mux.HandleFunc("POST /admin/submissions/{id}/reset", resetHandler)
 
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
