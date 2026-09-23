@@ -6,11 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Shift Scheduler</title>
 
-    <!--
-      By default HTMX ignores the body of a 4xx response, which would hide every
-      server-side validation message. Allow 4xx bodies to swap so the Go
-      validator's errors actually reach the page.
-    -->
+    
     <meta name="htmx-config" content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"4..","swap":true},{"code":"5..","swap":false,"error":true}]}'>
 
     <script src="https://unpkg.com/htmx.org@2.0.7"></script>
@@ -23,7 +19,6 @@
         <h1>Shift Scheduler</h1>
     </header>
 
-    <!-- main.css lays this out as two floated halves, so keep both divs. -->
     <nav>
         <div>
             {{if .LoggedIn}}

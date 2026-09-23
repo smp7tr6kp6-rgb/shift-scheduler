@@ -4,10 +4,6 @@ const START_MINUTE = 8 * 60;
 const END_MINUTE = 18 * 60;
 const SLOT_LENGTH = 10;
 
-/*
- * These mirror the constants in handlers.go. The server is the authority;
- * these only exist so the user gets feedback before submitting.
- */
 const MIN_SHIFT_MINUTES = 3 * 60;
 const MAX_DAILY_MINUTES = 9 * 60;
 const MIN_WEEKLY_MINUTES = 20 * 60;
@@ -38,9 +34,7 @@ function initializeScheduler() {
         return;
     }
 
-    /*
-     * Don't create the grid twice.
-     */
+
     if (grid.children.length > 0) {
         return;
     }
@@ -54,10 +48,6 @@ function initializeScheduler() {
 }
 
 
-/*
- * The server writes the user's stored schedule into window.SAVED_SCHEDULE so
- * a pending or rejected schedule comes back on reload instead of an empty grid.
- */
 function loadSavedSchedule() {
 
     const empty = {
@@ -102,9 +92,6 @@ function createGrid(grid) {
         minute += SLOT_LENGTH
     ) {
 
-        /*
-         * Time column
-         */
 
         const timeCell = document.createElement("div");
 
@@ -117,10 +104,7 @@ function createGrid(grid) {
         grid.appendChild(timeCell);
 
 
-        /*
-         * Five days
-         */
-
+       
         for (const day of days) {
 
             const slot = document.createElement("div");
@@ -370,11 +354,6 @@ function updateForm() {
 }
 
 
-/*
- * Group a day's selected slots into contiguous shifts, so the 3 hour minimum
- * can be checked per shift rather than per day. Mirrors scheduleBlocks in
- * handlers.go.
- */
 function shiftBlocks(minutes) {
 
     if (minutes.length === 0) {
@@ -431,10 +410,6 @@ function validateClientSide() {
 }
 
 
-/*
- * Returns the first rule the current selection breaks, or null when the
- * schedule is valid. These checks mirror validateSchedule in handlers.go.
- */
 function findScheduleProblem() {
 
     let weeklyMinutes = 0;
@@ -502,9 +477,7 @@ function formatTime(minutes) {
 }
 
 
-/*
- * Initial page load.
- */
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -512,9 +485,6 @@ document.addEventListener(
 );
 
 
-/*
- * HTMX page replacement.
- */
 
 document.body.addEventListener(
     "htmx:afterSwap",

@@ -106,7 +106,7 @@ func render(w http.ResponseWriter, r *http.Request, name string, data any) {
 
 // whenever user goes to website, it takes them to login first
 func homeHandlerRedirect(w http.ResponseWriter, r *http.Request) {
-	// "/" is a catch-all pattern, so anything that did not match a real route
+	// "/" is a catch-all pattern, so anything that didn't match a real route
 	// lands here. Only the root path should render the home page.
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -279,8 +279,6 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 			view.RejectionComment = submission.RejectionComment
 			view.ReadOnly = submission.Status == "approved"
 
-			// scheduler.html assigns this to window.SAVED_SCHEDULE, which
-			// scheduler.js reads to repopulate the grid.
 			encoded, err := json.Marshal(submission.Schedule)
 			if err != nil {
 				log.Println("encode saved schedule:", err)
@@ -297,8 +295,6 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func scheduleMasterHandler(w http.ResponseWriter, r *http.Request) {
-	// Authorise before doing any work, so an anonymous request cannot use the
-	// validator as a free oracle.
 	username, ok := getLoggedInUsername(r)
 	if !ok {
 		writeScheduleError(w, http.StatusUnauthorized, "You must be logged in.")
@@ -310,7 +306,6 @@ func scheduleMasterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Cap the body so a huge POST cannot exhaust memory.
 	r.Body = http.MaxBytesReader(w, r.Body, maxScheduleBodyBytes)
 
 	if err := r.ParseForm(); err != nil {
@@ -355,7 +350,6 @@ const (
 	maxWeeklyMinutes = 40 * 60
 
 	// The selectable window is Monday-Friday, 8am-6pm, in 10 minute slots.
-	// These must stay in step with static/js/scheduler.js.
 	dayStartMinute = 8 * 60
 	dayEndMinute   = 18 * 60
 	slotMinutes    = 10
@@ -391,7 +385,7 @@ func validateSchedule(schedule map[string][]int) error {
 
 		for _, minute := range sortedMinutes {
 			// A slot is a 10 minute block identified by its start minute, so
-			// the last valid start is 5:50 PM and it ends at 6:00 PM.
+			// the last valid start is 5:50 PM and it ends at 6:00 PM
 			if minute < dayStartMinute || minute > dayEndMinute-slotMinutes ||
 				!selectableMinutes[minute%60] {
 				return fmt.Errorf("%s contains a time outside 8:00 AM to 6:00 PM", day)
@@ -462,11 +456,8 @@ func slotLength(minute int) int {
 	return 10
 }
 
-// maxScheduleBodyBytes bounds the size of a schedule POST body.
 const maxScheduleBodyBytes = 64 * 1024
 
-// writeScheduleStatus renders the schedule-status partial that HTMX swaps into
-// #schedule-status.
 func writeScheduleStatus(w http.ResponseWriter, code int, status, message string) {
 	view := statusFragment{Status: status, Message: message}
 
@@ -541,8 +532,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	// A plain <a href="/logout"> click is a normal navigation, so a 204 with an
-	// HX-Redirect header would leave the browser sitting on the old page.
 	if r.Header.Get("HX-Request") != "true" {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -690,9 +679,6 @@ func resetHandler(w http.ResponseWriter, r *http.Request) {
 	renderSubmissionList(w)
 }
 
-// renderSubmissionList re-renders the queue. Approve and reject reply
-// with it directly so HTMX can swap #submissions-container in one hop; a 303
-// would make HTMX swap the whole list into the single row it targeted.
 func renderSubmissionList(w http.ResponseWriter) {
 	submissions, err := getAllSubmissions(submissionStore)
 	if err != nil {

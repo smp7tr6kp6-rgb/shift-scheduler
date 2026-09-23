@@ -11,9 +11,6 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-// errScheduleLocked is returned when a user tries to change a schedule that an
-// admin has already approved. An approved schedule is view-only until it is
-// reset (rejected) by an admin.
 var errScheduleLocked = errors.New("schedule is approved and locked")
 
 type ScheduleSubmission struct {
@@ -34,14 +31,11 @@ func openSubmissionStore(path string) (*sql.DB, error) {
 		}
 	}
 
-	// busy_timeout stops concurrent writers failing instantly with
-	// "database is locked".
 	db, err := sql.Open("sqlite", path+"?_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)")
 	if err != nil {
 		return nil, err
 	}
 
-	// SQLite only supports one writer at a time.
 	db.SetMaxOpenConns(1)
 
 	const schema = `
@@ -76,9 +70,6 @@ func saveSubmission(
 
 	submittedAt := time.Now().UTC().Format(time.RFC3339Nano)
 
-	// The read-then-write below has to be atomic, otherwise two submissions
-	// racing each other can both decide to INSERT and the user ends up with
-	// two pending rows.
 	tx, err := db.Begin()
 	if err != nil {
 		return 0, err
