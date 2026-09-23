@@ -1,24 +1,31 @@
 {{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Shift Scheduler</title>
+
     <script src="https://unpkg.com/htmx.org@2.0.7"></script>
     <link rel="stylesheet" href="/static/main.css">
-  </head>
-  <body>
+</head>
+
+<body>
+
     <header>
-      <h1>Shift Scheduler</h1>
+        <h1>Shift Scheduler</h1>
     </header>
 
     <nav>
-      <a href="/" hx-get="/" hx-target="#main-content" hx-swap="innerHTML">Home</a>
+        <a href="/">Home</a>
+        <a href="/admin">Admin</a>
+        <a href="/logout">Logout</a>
     </nav>
 
     <main id="main-content">
-      {{.Content}}
+        {{.Content}}
     </main>
-  </body>
+
+    <script src="/static/js/scheduler.js"></script>
+</body>
 </html>
 {{end}}

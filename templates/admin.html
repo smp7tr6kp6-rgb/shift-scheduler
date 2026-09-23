@@ -1,0 +1,18 @@
+{{define "admin"}}
+<section class="admin-shell">
+    <div class="admin-backdrop"></div>
+
+    <div class="admin-overlay">
+        <h2>Schedule Submissions Overview</h2>
+
+        <div
+            id="submissions-container"
+            hx-get="/admin/submissions"
+            hx-trigger="load"
+            hx-swap="innerHTML"
+        >
+            <p>Loading submissions...</p>
+        </div>
+    </div>
+</section>
+{{end}}

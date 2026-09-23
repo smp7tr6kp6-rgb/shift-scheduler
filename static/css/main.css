@@ -17,9 +17,18 @@ body {
     overflow-y: scroll;
 }
 
-header, nav, main, footer {
-    padding: 2px calc((100% - 800px) / 2) 0;
+header,
+nav,
+footer {
+    padding-left: max(20px, calc((100% - 800px) / 2));
+    padding-right: max(20px, calc((100% - 800px) / 2));
 }
+
+main {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
 
 main {
     margin-top: 54px;
@@ -310,4 +319,263 @@ footer {
     height: 60px;
     color: #6A6C6F;
     text-align: center;
+}
+
+/* =========================================================
+   SCHEDULER
+   ========================================================= */
+
+.scheduler-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.scheduler-title {
+    margin-bottom: 25px;
+}
+
+.scheduler-title h2 {
+    margin-bottom: 5px;
+}
+
+.scheduler-title p {
+    color: #6A6C6F;
+    font-size: 16px;
+}
+
+
+/* Main scheduler box */
+
+.scheduler {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #D9DDE1;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+
+/* Header */
+
+.scheduler-header {
+    display: grid;
+    grid-template-columns: 80px repeat(5, 1fr);
+
+    background: #34495E;
+    color: white;
+}
+
+.time-header {
+    border-right: 1px solid rgba(255,255,255,0.2);
+}
+
+.day-header {
+    min-height: 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-right: 1px solid rgba(255,255,255,0.2);
+
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.day-header:last-child {
+    border-right: none;
+}
+
+.day-header span {
+    margin-top: 4px;
+
+    font-size: 13px;
+    font-weight: normal;
+
+    color: #DCE4EA;
+}
+
+
+/* Grid */
+
+.schedule-grid {
+    display: grid;
+
+    grid-template-columns: 80px repeat(5, 1fr);
+
+    /*
+       60 rows.
+
+       Each row = 10 minutes.
+       8 AM → 6 PM = 10 hours.
+       10 hours × 6 = 60 rows.
+    */
+    grid-auto-rows: 22px;
+
+    width: 100%;
+
+    background: #FFFFFF;
+}
+
+
+/* Time labels */
+
+.time-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding-right: 10px;
+
+    background: #F7F9FA;
+
+    color: #6A6C6F;
+
+    font-size: 12px;
+
+    border-right: 1px solid #D9DDE1;
+    border-bottom: 1px solid #E8EAEC;
+}
+
+
+/* 10 minute cells */
+
+.schedule-slot {
+    background: #FFFFFF;
+
+    border-right: 1px solid #E5E8EA;
+    border-bottom: 1px solid #E8EAEC;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition: background-color 0.05s ease;
+}
+
+
+/* Hover */
+
+.schedule-slot:hover {
+    background: #E8F6E2;
+}
+
+
+/* Selected */
+
+.schedule-slot.selected {
+    background: #62CB31;
+    border-color: #55B52A;
+}
+
+
+/* Drag preview */
+
+.schedule-slot.drag-preview {
+    background: #A8E58F;
+}
+
+
+/* Selected + hover */
+
+.schedule-slot.selected:hover {
+    background: #4EB722;
+}
+
+
+/* Summary */
+
+.schedule-summary {
+    margin-top: 20px;
+
+    padding: 16px 20px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #D9DDE1;
+
+    border-radius: 5px;
+}
+
+.schedule-summary > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#weekly-total {
+    font-weight: bold;
+    color: #34495E;
+}
+
+
+/* Validation */
+
+#schedule-validation {
+    min-height: 25px;
+
+    margin-top: 12px;
+
+    color: #C0392B;
+
+    font-weight: bold;
+}
+
+
+/* Submit */
+
+.schedule-submit {
+    background-color: #62CB31 !important;
+
+    color: #FFFFFF !important;
+
+    border: none !important;
+
+    border-radius: 4px !important;
+
+    padding: 13px 25px !important;
+
+    margin-top: 10px;
+
+    font-family: "Ubuntu Mono", monospace;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.schedule-submit:hover {
+    background-color: #4EB722 !important;
+}
+
+.schedule-submit:disabled {
+    background-color: #AEB5BA !important;
+
+    cursor: not-allowed;
+}
+
+
+/* HTMX response */
+
+#schedule-status {
+    margin-top: 15px;
+}
+
+
+/* Mobile */
+
+@media (max-width: 900px) {
+
+    .scheduler-container {
+        overflow-x: auto;
+    }
+
+    .scheduler {
+        min-width: 800px;
+    }
 }

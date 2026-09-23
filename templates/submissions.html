@@ -1,0 +1,22 @@
+{{define "submissions"}}
+
+<div class="submissions">
+
+    <div class="submissions-header">
+        <span>Student</span>
+        <span>Submitted</span>
+        <span>Status</span>
+        <span>Actions</span>
+    </div>
+
+    {{if not .}}
+        <p>No pending submissions.</p>
+    {{else}}
+        {{range .}}
+            {{template "submission-row" .}}
+        {{end}}
+    {{end}}
+
+</div>
+
+{{end}}

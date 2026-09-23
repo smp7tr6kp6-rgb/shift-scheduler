@@ -17,10 +17,19 @@ func main() {
 	defer db.Close()
 	submissionStore = db
 
+	mux.HandleFunc("/", homeHandlerRedirect)
+
 	mux.HandleFunc("GET /login", loginPageHandler)
 	mux.HandleFunc("POST /login", loginHandler)
-	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/logout", logoutHandler)
+
 	mux.HandleFunc("POST /schedule/master", scheduleMasterHandler)
+
+	mux.HandleFunc("GET /admin", adminHandler)
+	mux.HandleFunc("GET /admin/submissions", submissionsHandler)
+	mux.HandleFunc("POST /admin/submissions/{id}/approve", approveHandler)
+	mux.HandleFunc("POST /admin/submissions/{id}/reject", rejectHandler)
+
 	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	log.Print("starting server on 4000")

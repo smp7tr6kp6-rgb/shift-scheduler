@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestScheduleMasterHandlerSavesValidSubmission(t *testing.T) {
@@ -79,6 +80,7 @@ func testSubmissionStore(t *testing.T) *sql.DB {
 	t.Cleanup(func() { db.Close() })
 	return db
 }
+
 func postSchedule(t *testing.T, schedule string) *httptest.ResponseRecorder {
 	t.Helper()
 
@@ -88,7 +90,10 @@ func postSchedule(t *testing.T, schedule string) *httptest.ResponseRecorder {
 	}
 
 	sessions.mu.Lock()
-	sessions.sessions[token] = "student1"
+	sessions.sessions[token] = Session{
+		Username:  "student1",
+		ExpiresAt: time.Now().Add(8 * time.Hour),
+	}
 	sessions.mu.Unlock()
 
 	t.Cleanup(func() {

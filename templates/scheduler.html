@@ -1,0 +1,81 @@
+{{define "scheduler"}}
+
+<section class="scheduler-container">
+
+    <div class="scheduler-title">
+        <h2>My Schedule</h2>
+        <p>Select your available working hours by dragging across the grid.</p>
+    </div>
+
+    <div class="scheduler">
+
+        <div class="scheduler-header">
+            <div class="time-header"></div>
+
+            <div class="day-header">
+                Monday
+                <span id="total-Mon">0.0h</span>
+            </div>
+
+            <div class="day-header">
+                Tuesday
+                <span id="total-Tue">0.0h</span>
+            </div>
+
+            <div class="day-header">
+                Wednesday
+                <span id="total-Wed">0.0h</span>
+            </div>
+
+            <div class="day-header">
+                Thursday
+                <span id="total-Thu">0.0h</span>
+            </div>
+
+            <div class="day-header">
+                Friday
+                <span id="total-Fri">0.0h</span>
+            </div>
+        </div>
+
+        <div id="schedule-grid" class="schedule-grid"></div>
+
+    </div>
+
+    <div class="schedule-summary">
+        <div>
+            <strong>Weekly Total</strong>
+            <span id="weekly-total">0.0 hours</span>
+        </div>
+    </div>
+
+    <div id="schedule-validation"></div>
+
+    <form
+        id="schedule-form"
+        hx-post="/schedule/master"
+        hx-target="#schedule-status"
+        hx-swap="innerHTML"
+    >
+
+        <input
+            type="hidden"
+            name="schedule"
+            id="schedule-json"
+        >
+
+        <button
+            type="submit"
+            id="submit-schedule"
+            class="schedule-submit"
+        >
+            Submit Schedule
+        </button>
+
+    </form>
+
+    <div id="schedule-status"></div>
+
+</section>
+
+{{end}}

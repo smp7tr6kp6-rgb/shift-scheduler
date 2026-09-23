@@ -1,10 +1,7 @@
 {{define "home"}}
-<section class = "home-shell">
-    <div class  = "home-backdrop"></div>
 
-    <div class = "home-overlay">
-        <h2>Kev's Shift Scheduler</h2>
-    </div>
-  {{template "schedule_grid" .}}
-</section>
+<h2>Shift Scheduler</h2>
+
+{{template "scheduler" .}}
+
 {{end}}

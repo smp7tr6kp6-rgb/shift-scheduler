@@ -1,0 +1,55 @@
+{{define "submission-row"}}
+
+<div class="submission-row" id="submission-{{.ID}}">
+
+    <div class="submission-user">
+        <strong>{{.Username}}</strong>
+    </div>
+
+    <div class="submission-date">
+        {{.SubmittedAt.Format "Jan 2, 2006 3:04 PM"}}
+    </div>
+
+    <div class="submission-status">
+        <span class="status-badge status-{{.Status}}">
+            {{.Status}}
+        </span>
+    </div>
+
+    <div class="submission-actions">
+
+        <form
+            method="POST"
+            action="/admin/submissions/{{.ID}}/approve"
+            hx-post="/admin/submissions/{{.ID}}/approve"
+            hx-target="#submission-{{.ID}}"
+            hx-swap="outerHTML"
+        >
+            <button type="submit" class="approve-button">
+                Approve
+            </button>
+        </form>
+
+        <form
+            method="POST"
+            action="/admin/submissions/{{.ID}}/reject"
+            hx-post="/admin/submissions/{{.ID}}/reject"
+            hx-target="#submission-{{.ID}}"
+            hx-swap="outerHTML"
+        >
+            <input
+                type="text"
+                name="comment"
+                placeholder="Reason for rejection"
+            >
+
+            <button type="submit" class="reject-button">
+                Reject
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+{{end}}

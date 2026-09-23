@@ -114,3 +114,111 @@ func saveSubmission(
 
 	return id, nil
 }
+
+func approveSubmission(db *sql.DB, id int64) error {
+	result, err := db.Exec(`
+		UPDATE schedule_submissions
+		SET
+			status = 'approved',
+			rejection_comment = ''
+		WHERE id = ?
+		  AND status = 'pending'
+	`, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
+}
+
+func rejectSubmission(db *sql.DB, id int64, comment string) error {
+	result, err := db.Exec(`
+		UPDATE schedule_submissions
+		SET
+			status = 'rejected',
+			rejection_comment = ?
+		WHERE id = ?
+		  AND status = 'pending'
+	`, comment, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return sql.ErrNoRows
+	}
+
+	return nil
+}
+
+func getPendingSubmissions(db *sql.DB) ([]ScheduleSubmission, error) {
+	rows, err := db.Query(`
+		SELECT
+			id,
+			username,
+			schedule_json,
+			status,
+			rejection_comment,
+			submitted_at
+		FROM schedule_submissions
+		WHERE status = 'pending'
+		ORDER BY id ASC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var submissions []ScheduleSubmission
+
+	for rows.Next() {
+		var submission ScheduleSubmission
+		var scheduleJSON string
+		var submittedAt string
+
+		if err := rows.Scan(
+			&submission.ID,
+			&submission.Username,
+			&scheduleJSON,
+			&submission.Status,
+			&submission.RejectionComment,
+			&submittedAt,
+		); err != nil {
+			return nil, err
+		}
+
+		if err := json.Unmarshal(
+			[]byte(scheduleJSON),
+			&submission.Schedule,
+		); err != nil {
+			return nil, err
+		}
+
+		submission.SubmittedAt, err = time.Parse(time.RFC3339Nano, submittedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		submissions = append(submissions, submission)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return submissions, nil
+}
